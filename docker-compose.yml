@@ -8,7 +8,8 @@ services:
     ports:
       - "1880:1880"
     volumes:
-      - vlm-nodered:/data
+      # - vlm-nodered:/data
+      - ./data/nodered:/data
     networks:
       - ntw-dit247
 
@@ -25,15 +26,19 @@ services:
     ports:
       - "5984:5984"
     volumes:
-      - vlm-couchdb:/opt/couchdb/data
-      - ./couchdb/local.ini:/opt/couchdb/etc/local.ini
+      # - vlm-couchdb:/opt/couchdb/data
+      - ./data/couchdb:/data
+      - ./configs/couchdb/local.ini:/opt/couchdb/etc/local.ini
     networks:
       - ntw-dit247
     depends_on:
       - srv-nodered
 
   srv-openwhisk:
-    image: openwhisk/standalone:6246f6a
+    # image: openwhisk/standalone:6246f6a
+    build:
+      context: .
+      dockerfile: Dockerfile.openwhisk
     container_name: ctr-openwhisk
     environment:
       - OPENWHISK_HOME=/openwhisk
@@ -47,7 +52,8 @@ services:
       - "3232:3232" # Web UI port
       - "3233:3233" # Config port
     volumes:
-      - vlm-openwhisk:/openwhisk
+      # - vlm-openwhisk:/openwhisk
+      - ./data/openwhisk:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       -  ntw-dit247
@@ -61,7 +67,8 @@ services:
       - "9000:9000"   # Web UI port
       - "9001:9001"   # Console port
     volumes:
-      - vlm-minio:/data
+      # - vlm-minio:/data
+      - ./data/minio:/data
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=password
@@ -87,8 +94,8 @@ networks:
   ntw-dit247:
     driver: bridge
 
-volumes:
-  vlm-nodered:
-  vlm-couchdb:
-  vlm-minio:
-  vlm-openwhisk:
+# volumes:
+#   vlm-nodered:
+#   vlm-couchdb:
+#   vlm-minio:
+#   vlm-openwhisk:
