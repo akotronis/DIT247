@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  srv-nodered:
+    image: nodered/node-red:4.0-debian
+    container_name: ctr-nodered
+    restart: always
+    ports:
+      - "1880:1880"
+    volumes:
+      - vlm-nodered:/data
+    networks:
+      - ntw-dit247
+
+  srv-couchdb:
+    image: apache/couchdb:3.3.3
+    # build:
+      # context: .
+      # dockerfile: Dockerfile.couchdb
+    container_name: ctr-couchdb
+    restart: always
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=password
+    ports:
+      - "5984:5984"
+    volumes:
+      - vlm-couchdb:/opt/couchdb/data
+      - ./couchdb/local.ini:/opt/couchdb/etc/local.ini
+    networks:
+      - ntw-dit247
+    depends_on:
+      - srv-nodered
+
+  srv-openwhisk:
+    image: openwhisk/standalone:6246f6a
+    container_name: ctr-openwhisk
+    environment:
+      - OPENWHISK_HOME=/openwhisk
+      - OW_DB=CouchDB
+      - OW_DB_USERNAME=admin
+      - OW_DB_PASSWORD=admin
+      - OW_DB_PROTOCOL=http
+      - OW_DB_HOST=couchdb
+      - OW_DB_PORT=5984
+    ports:
+      - "3232:3232" # Web UI port
+      - "3233:3233" # Config port
+    volumes:
+      - vlm-openwhisk:/openwhisk
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      -  ntw-dit247
+    depends_on:
+      - srv-couchdb
+
+  srv-minio:
+    image: minio/minio:RELEASE.2024-07-04T14-25-45Z.fips
+    container_name: ctr-minio
+    ports:
+      - "9000:9000"   # Web UI port
+      - "9001:9001"   # Console port
+    volumes:
+      - vlm-minio:/data
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=password
+    networks:
+      -  ntw-dit247
+    depends_on:
+      - srv-openwhisk
+    command: server /data --console-address ":9001"
+
+  srv-mailhog:
+    image: mailhog/mailhog:v1.0.1
+    # image: corpusops/mailhog:v1.0.1
+    container_name: ctr-mailhog
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+    networks:
+      -  ntw-dit247
+    depends_on:
+      - srv-minio
+
+networks:
+  ntw-dit247:
+    driver: bridge
+
+volumes:
+  vlm-nodered:
+  vlm-couchdb:
+  vlm-minio:
+  vlm-openwhisk:
