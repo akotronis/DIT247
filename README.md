@@ -21,3 +21,12 @@
 ## Openwhisk
 - Web UI: http://localhost:3232
 - Config Info: http://localhost:3233
+- Run `>>> docker logs ctr-openwhisk | grep auth` to get the info  
+  `wsk property set --apihost 'API_HOST' --auth 'AUTH_KEY'`
+- Run inside the container
+  - `>>> wsk property set --apihost http://ctr-openwhisk:3233 --auth AUTH_KEY` to set credentials
+  - `>>> wsk namespace list` to verify `guest` namespace is set. If not
+    - `>>> echo "NAMESPACE=guest" >> ~/.wskprops`
+  - Verifications:
+    - `>>> wsk list -v` to verify host connection and credentials
+    - `>>> wsk property get` to verify configuration

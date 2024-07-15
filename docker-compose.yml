@@ -15,9 +15,6 @@ services:
 
   srv-couchdb:
     image: apache/couchdb:3.3.3
-    # build:
-      # context: .
-      # dockerfile: Dockerfile.couchdb
     container_name: ctr-couchdb
     restart: always
     environment:
@@ -35,7 +32,6 @@ services:
       - srv-nodered
 
   srv-openwhisk:
-    # image: openwhisk/standalone:6246f6a
     build:
       context: .
       dockerfile: Dockerfile.openwhisk
