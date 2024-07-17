@@ -19,6 +19,9 @@
 - http://localhost:9000
 
 ## Openwhisk
+- `build0.gradle` is the file from the [repo](https://github.com/apache/openwhisk/blob/master/core/standalone/build.gradle)
+- `build.gradle` is the file with the modifucations required in order for `>>> /gradlew --info :core:standalone:build` to run successfully
+
 - Web UI: http://localhost:3232
 - Config Info: http://localhost:3233
 - Run `>>> docker logs ctr-openwhisk | grep auth` to get the info  

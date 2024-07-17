@@ -13,55 +13,63 @@ services:
     networks:
       - ntw-dit247
 
-  srv-couchdb:
-    image: apache/couchdb:3.3.3
-    container_name: ctr-couchdb
-    restart: always
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=password
-    ports:
-      - "5984:5984"
-    volumes:
-      # - vlm-couchdb:/opt/couchdb/data
-      - ./data/couchdb:/data
-      - ./configs/couchdb/local.ini:/opt/couchdb/etc/local.ini
-    networks:
-      - ntw-dit247
-    depends_on:
-      - srv-nodered
+  # srv-couchdb:
+  #   image: apache/couchdb:3.3.3
+  #   container_name: ctr-couchdb
+  #   restart: always
+  #   environment:
+  #     - COUCHDB_USER=admin
+  #     - COUCHDB_PASSWORD=password
+  #   ports:
+  #     - "5984:5984"
+  #   volumes:
+  #     # - vlm-couchdb:/opt/couchdb/data
+  #     - ./data/couchdb:/data
+  #     - ./configs/couchdb/local.ini:/opt/couchdb/etc/local.ini
+  #   networks:
+  #     - ntw-dit247
+  #   depends_on:
+  #     - srv-nodered
 
   srv-openwhisk:
     build:
       context: .
       dockerfile: Dockerfile.openwhisk
     container_name: ctr-openwhisk
+    privileged: true
     environment:
-      - OPENWHISK_HOME=/openwhisk
-      - OW_DB=CouchDB
-      - OW_DB_USERNAME=admin
-      - OW_DB_PASSWORD=admin
-      - OW_DB_PROTOCOL=http
-      - OW_DB_HOST=couchdb
-      - OW_DB_PORT=5984
+      # - OPENWHISK_HOME=/openwhisk
+      # - OW_DB=CouchDB
+      # - OW_DB_USERNAME=admin
+      # - OW_DB_PASSWORD=admin
+      # - OW_DB_PROTOCOL=http
+      # - OW_DB_HOST=couchdb
+      # - OW_DB_PORT=5984
+      - WHISK_STANDALONE_HOST_NAME=${WHISK_HOST_NAME}
+      - WHISK_STANDALONE_HOST_INTERNAL=${WHISK_HOST_INTERNAL}
+      - WHISK_STANDALONE_HOST_EXTERNAL=${WHISK_HOST_EXTERNAL}
     ports:
-      - "3232:3232" # Web UI port
-      - "3233:3233" # Config port
+      - "3232:3232" # Playgroun)
+      - "3233:3233" # OpenWhisk server
+      - "3234:3234" # API Gateway
+      - "5984:5984" # Couchdb
+      - "9092:9092" # Kafka
+      - "9000:9000" # Kafka UI
     volumes:
       # - vlm-openwhisk:/openwhisk
       - ./data/openwhisk:/data
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       -  ntw-dit247
-    depends_on:
-      - srv-couchdb
+    # depends_on:
+    #   - srv-couchdb
 
   srv-minio:
     image: minio/minio:RELEASE.2024-07-04T14-25-45Z.fips
     container_name: ctr-minio
     ports:
-      - "9000:9000"   # Web UI port
-      - "9001:9001"   # Console port
+      - "9100:9000"   # Web UI port
+      - "9101:9001"   # Console port
     volumes:
       # - vlm-minio:/data
       - ./data/minio:/data
