@@ -1,7 +1,0 @@
-FROM apache/couchdb:3.3.3
-
-# Copy the initialization script into the container
-COPY init.sh /docker-entrypoint-initdb.d/init.sh
-
-# Make the script executable
-RUN chmod +x /docker-entrypoint-initdb.d/init.sh

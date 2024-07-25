@@ -5,6 +5,11 @@
 - https://docs.couchdb.org/en/stable/config/auth.html#config-admins
 
 
+# Process management on Windows 11
+`>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
+`>>> tasklist /FI "PID eq 19812"` to identify the process
+`>>> taskkill /PID 19812 /F` to kill the process
+
 # UIs
 ## Couch DB
 - http://localhost:5984/_utils/#login

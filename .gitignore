@@ -1,2 +1,4 @@
-data/minio/*
-data/nodered/*
+.vagrant
+*.env
+**/data/nodered/**
+**/data/minio/**
