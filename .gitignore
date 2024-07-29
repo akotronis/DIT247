@@ -1,4 +1,9 @@
 .vagrant
 *.env
+
+**/repos/
+
 **/data/nodered/**
+!**/data/nodered/**/flows.*
+
 **/data/minio/**

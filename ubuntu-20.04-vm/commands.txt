@@ -1,0 +1,63 @@
+8001 kafka topics
+9001 minio
+5984
+
+
+
+sudo curl -L "https://github.com/apache/openwhisk-cli/releases/download/1.2.0/OpenWhisk_CLI-1.2.0-linux-amd64.tgz" -o OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+sudo tar -xzf OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+sudo chmod +x wsk
+sudo mv wsk /usr/local/bin/
+sudo rm OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+sudo rm LICENSE.txt
+sudo rm NOTICE.txt
+
+cd openwhisk
+sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
+
+    default: [ 3233  ] http://0.0.0.0:3233 (Controller)
+    default: [ 6379  ] http://localhost:6379 (whisk-redis)
+    default: [ 9000  ] http://localhost:9000 (whisk-apigw, Api Gateway - Api Service )
+    default: [ 3234  ] http://localhost:3234 (whisk-apigw, Api Gateway - Management Service)
+    default: [ 5984  ] http://localhost:5984/_utils (whisk-couch, Username: [whisk_admin], Password: [some_passw0rd])
+    default: [ 9092  ] localhost:9092 (kafka)
+    default: [ 9091  ] 172.17.0.1:9091 (kafka-docker)
+    default: [ 2181  ] Zookeeper (zookeeper)
+    default: [ 39109 ] http://localhost:39109 (whisk-kafka-drop-ui)
+    default: [ 3232  ] http://0.0.0.0:3232/playground (Playground)
+
+
+wsk property set --apihost http://127.0.0.1:3233
+cd openwhisk
+wsk property set --auth `cat ansible/files/auth.guest`
+
+wsk -i action invoke -b helloLab -p name myname
+
+
+vagrant up
+vagrant halt
+vagrant destroy
+vagrant ssh-config
+VAGRANT_LOG=debug vagrant up
+
+vagrant status on the folder of a Vagrant file
+vagrant global-stats from anywhere for the status of any vm
+
+vagrant provision if I make changes on the provision part
+vagrant reload if I make changes on the other parts
+vagrant reload --provision to run all parts
+
+
+
+
+inside vm
+>>> sudo usermod -aG docker vagrant
+>>> exit
+outside vm
+>>> vagrant reload
+
+
+23bc46b1-71f6-4ed5-8c54-816aa4f8c502
+123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP
+
+{"api_version":"1.0.0","api_version_path":"v1","build":"2024-07-23T00:16:25+0000","buildno":"4e8562f","description":"OpenWhisk API","swagger_paths":{"api-docs":"/api-docs","ui":"/docs"}}

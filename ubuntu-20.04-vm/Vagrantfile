@@ -10,10 +10,16 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  # # Disable auto-insertion of SSH keys
+  # config.ssh.insert_key = false
+
+  # # Specify the path to your private key
+  # config.ssh.private_key_path = "C:/Users/akotr/.ssh/id_ed25519"
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
-  config.vm.boot_timeout = 600
+  config.vm.boot_timeout = 300 # 600
   # config.ssh.timeout = 300
 
   # Disable automatic box update checking. If you disable this, then
@@ -32,16 +38,16 @@ Vagrant.configure("2") do |config|
   # via 127.0.0.1 to disable public access
 
   # Java build Installation
-  config.vm.network "forwarded_port", guest: 3232, host: 3232, host_ip: "127.0.0.1" # (Playground)
-  config.vm.network "forwarded_port", guest: 3233, host: 3233, host_ip: "127.0.0.1" # (Controller)
-  config.vm.network "forwarded_port", guest: 6379, host: 6379, host_ip: "127.0.0.1" # (whisk-redis)
-  config.vm.network "forwarded_port", guest: 9000, host: 9000, host_ip: "127.0.0.1" # (whisk-apigw, Api Gateway - Api Service)
-  config.vm.network "forwarded_port", guest: 3234, host: 3234, host_ip: "127.0.0.1" # (whisk-apigw, Api Gateway - Management Service)
-  config.vm.network "forwarded_port", guest: 5984, host: 3234, host_ip: "127.0.0.1" # (whisk-couch, Username: [whisk_admin], Password: [some_passw0rd])
-  config.vm.network "forwarded_port", guest: 9092, host: 9092, host_ip: "127.0.0.1" # (kafka)
-  config.vm.network "forwarded_port", guest: 39109, host: 39109, host_ip: "127.0.0.1" # (whisk-kafka-drop-ui) IT IS RANDOM
-  config.vm.network "forwarded_port", guest: 9100, host: 9100, host_ip: "127.0.0.1" # (Minio Web UI port)
-  config.vm.network "forwarded_port", guest: 9101, host: 9101, host_ip: "127.0.0.1" # (Minio Console port)
+  # config.vm.network "forwarded_port", guest: 3232, host: 3232, host_ip: "127.0.0.1" # (Playground)
+  # config.vm.network "forwarded_port", guest: 3233, host: 3233, host_ip: "127.0.0.1" # (Controller)
+  # config.vm.network "forwarded_port", guest: 6379, host: 6379, host_ip: "127.0.0.1" # (whisk-redis)
+  # config.vm.network "forwarded_port", guest: 9000, host: 9000, host_ip: "127.0.0.1" # (whisk-apigw, Api Gateway - Api Service)
+  # config.vm.network "forwarded_port", guest: 3234, host: 3234, host_ip: "127.0.0.1" # (whisk-apigw, Api Gateway - Management Service)
+  # config.vm.network "forwarded_port", guest: 5984, host: 3234, host_ip: "127.0.0.1" # (whisk-couch, Username: [whisk_admin], Password: [some_passw0rd])
+  # config.vm.network "forwarded_port", guest: 9092, host: 9092, host_ip: "127.0.0.1" # (kafka)
+  # config.vm.network "forwarded_port", guest: 39109, host: 39109, host_ip: "127.0.0.1" # (whisk-kafka-drop-ui) IT IS RANDOM
+  # config.vm.network "forwarded_port", guest: 9100, host: 9100, host_ip: "127.0.0.1" # (Minio Web UI port)
+  # config.vm.network "forwarded_port", guest: 9101, host: 9101, host_ip: "127.0.0.1" # (Minio Console port)
 
   # Docker Compose Installation
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -89,7 +95,7 @@ Vagrant.configure("2") do |config|
     vb.gui = false
   
     # Customize the amount of memory on the VM:
-    vb.memory = "2048"
+    vb.memory = "4096" # "2048"
     vb.cpus = 2
   end
   
@@ -100,6 +106,16 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+
+    # # Create the .ssh directory if it does not exist
+    # mkdir -p /home/vagrant/.ssh
+    # # Read the public key from the host machine and add it to the VM's authorized_keys
+    # echo "#{File.read('C:/Users/akotr/.ssh/id_ed25519.pub').strip}" >> /home/vagrant/.ssh/authorized_keys
+
+    # # Set the appropriate permissions
+    # chown -R vagrant:vagrant /home/vagrant/.ssh
+    # chmod 600 /home/vagrant/.ssh/authorized_keys
+
     sudo apt-get update && apt-get install -y \
     openjdk-8-jdk \
     nodejs \
@@ -134,7 +150,7 @@ Vagrant.configure("2") do |config|
     # Download openwhisk
     sudo git clone https://github.com/apache/openwhisk.git /dit247/repos/openwhisk
 
-    cd /dit247
+    cd /dit247/repos/openwhisk
 
     # Build jar
     sudo ./gradlew --info :core:standalone:build
@@ -145,6 +161,8 @@ Vagrant.configure("2") do |config|
 
     # Add vagrant user to the docker group
     sudo usermod -aG docker vagrant
+
+    cd /dit247
 
     # Run openwhisk
     # sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./repos/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
