@@ -10,6 +10,9 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  # Enable SSH keep-alive
+  config.ssh.keep_alive = true
+
   # # Disable auto-insertion of SSH keys
   # config.ssh.insert_key = false
 
@@ -19,8 +22,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
-  config.vm.boot_timeout = 300 # 600
-  # config.ssh.timeout = 300
+  config.vm.boot_timeout = 100 # 600
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -148,9 +150,9 @@ Vagrant.configure("2") do |config|
     wsk --help
 
     # Download openwhisk
-    sudo git clone https://github.com/apache/openwhisk.git /dit247/repos/openwhisk
+    sudo git clone https://github.com/apache/openwhisk.git
 
-    cd /dit247/repos/openwhisk
+    cd openwhisk
 
     # Build jar
     sudo ./gradlew --info :core:standalone:build
