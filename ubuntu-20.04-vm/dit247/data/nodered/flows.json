@@ -1,0 +1,334 @@
+[
+    {
+        "id": "1b034dd948f70bc1",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ef727b9db2adfa22",
+        "type": "minio-config",
+        "name": "MinIO",
+        "host": "ctr-minio",
+        "port": "9000",
+        "useSsl": false
+    },
+    {
+        "id": "57495aeef88197ca",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "Input image path",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "/data/images/test.png",
+        "payloadType": "str",
+        "x": 200,
+        "y": 640,
+        "wires": [
+            [
+                "1a9eeddc4cba9414"
+            ]
+        ]
+    },
+    {
+        "id": "ca6ee7fdfa42d2df",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "1a9eeddc4cba9414",
+        "type": "file in",
+        "z": "1b034dd948f70bc1",
+        "name": "Read image",
+        "filename": "payload",
+        "filenameType": "msg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 430,
+        "y": 640,
+        "wires": [
+            [
+                "ca6ee7fdfa42d2df",
+                "0c367a5447a8e962"
+            ]
+        ]
+    },
+    {
+        "id": "da3c94e28c43ba3b",
+        "type": "buckets",
+        "z": "1b034dd948f70bc1",
+        "buckets_name": "Make dit247 bucket",
+        "host": "ef727b9db2adfa22",
+        "buckets_operation": "makeBucket",
+        "buckets_bucket": "msg.payload",
+        "buckets_region": "",
+        "buckets_prefix": "",
+        "buckets_recursive": false,
+        "buckets_start_after": "",
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "d6ae18c3095e1e5c"
+            ],
+            [
+                "50a22c84cdef299c"
+            ]
+        ]
+    },
+    {
+        "id": "b9bc2020c42ff38e",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "dit247",
+        "payloadType": "str",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "da3c94e28c43ba3b"
+            ]
+        ]
+    },
+    {
+        "id": "d6ae18c3095e1e5c",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Created bucket",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "50a22c84cdef299c",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Bucket creation error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0c367a5447a8e962",
+        "type": "objects",
+        "z": "1b034dd948f70bc1",
+        "objects_name": "",
+        "host": "ef727b9db2adfa22",
+        "objects_operation": "putObject",
+        "objects_bucket": "dit247",
+        "objects_object": "test",
+        "objects_offset": "",
+        "objects_length": "",
+        "objects_stream": "msg.payload",
+        "objects_size": "",
+        "objects_metadata": "",
+        "objects_sourceobject": "",
+        "objects_conditions": "",
+        "objects_objectslist": [],
+        "objects_prefix": "",
+        "objects_etag": "",
+        "objects_datetime": "",
+        "x": 670,
+        "y": 640,
+        "wires": [
+            [
+                "e88de00b61e279ac"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e88de00b61e279ac",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "daaf97f3614c55b8",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Bucket creation",
+        "info": "",
+        "x": 140,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "df9ee7b7a947afb0",
+        "type": "buckets",
+        "z": "1b034dd948f70bc1",
+        "buckets_name": "Make dit247 bucket",
+        "host": "ef727b9db2adfa22",
+        "buckets_operation": "listBuckets",
+        "buckets_bucket": "dit247",
+        "buckets_region": "",
+        "buckets_prefix": "",
+        "buckets_recursive": false,
+        "buckets_start_after": "",
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "86c27f539378a4ef"
+            ],
+            [
+                "fe4ff32c8faca179"
+            ]
+        ]
+    },
+    {
+        "id": "0ae26a5063406426",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "df9ee7b7a947afb0"
+            ]
+        ]
+    },
+    {
+        "id": "86c27f539378a4ef",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Existing buckets",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "fe4ff32c8faca179",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Bucket list error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "0b0f6d9a498d0b26",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Bucket list",
+        "info": "",
+        "x": 120,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "1579b89898b1e722",
+        "type": "Kafka Commit",
+        "z": "1b034dd948f70bc1",
+        "name": "",
+        "x": 180,
+        "y": 400,
+        "wires": [
+            [],
+            []
+        ]
+    }
+]

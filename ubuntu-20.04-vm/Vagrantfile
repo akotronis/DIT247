@@ -39,7 +39,9 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 3234, host: 3234, host_ip: "127.0.0.1" # (whisk-apigw, Api Gateway - Management Service)
   config.vm.network "forwarded_port", guest: 5984, host: 3234, host_ip: "127.0.0.1" # (whisk-couch, Username: [whisk_admin], Password: [some_passw0rd])
   config.vm.network "forwarded_port", guest: 9092, host: 9092, host_ip: "127.0.0.1" # (kafka)
-  config.vm.network "forwarded_port", guest: 39109, host: 39109, host_ip: "127.0.0.1" # (whisk-kafka-drop-ui) Is it random?
+  config.vm.network "forwarded_port", guest: 39109, host: 39109, host_ip: "127.0.0.1" # (whisk-kafka-drop-ui) IT IS RANDOM
+  config.vm.network "forwarded_port", guest: 9100, host: 9100, host_ip: "127.0.0.1" # (Minio Web UI port)
+  config.vm.network "forwarded_port", guest: 9101, host: 9101, host_ip: "127.0.0.1" # (Minio Console port)
 
   # Docker Compose Installation
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
@@ -130,9 +132,9 @@ Vagrant.configure("2") do |config|
     wsk --help
 
     # Download openwhisk
-    sudo git clone https://github.com/apache/openwhisk.git
+    sudo git clone https://github.com/apache/openwhisk.git /dit247/repos/openwhisk
 
-    cd openwhisk
+    cd /dit247
 
     # Build jar
     sudo ./gradlew --info :core:standalone:build
@@ -141,8 +143,11 @@ Vagrant.configure("2") do |config|
     wsk property set --apihost http://127.0.0.1:3233
     wsk property set --auth `cat ansible/files/auth.guest`
 
+    # Add vagrant user to the docker group
+    sudo usermod -aG docker vagrant
+
     # Run openwhisk
-    sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
+    # sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./repos/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
 
   SHELL
 end

@@ -1,0 +1,10 @@
+# Start from the official MinIO image
+FROM minio/minio:RELEASE.2024-07-04T14-25-45Z.fips
+
+# Download the MinIO Client (mc) using curl
+RUN curl -O https://dl.min.io/client/mc/release/linux-amd64/mc && \
+    chmod +x mc && \
+    mv mc /usr/local/bin/mc
+
+# Start the MinIO server with the console address
+CMD ["minio", "server", "/data", "--console-address", ":9001"]
