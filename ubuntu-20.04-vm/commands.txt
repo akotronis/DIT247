@@ -61,3 +61,16 @@ outside vm
 123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP
 
 {"api_version":"1.0.0","api_version_path":"v1","build":"2024-07-23T00:16:25+0000","buildno":"4e8562f","description":"OpenWhisk API","swagger_paths":{"api-docs":"/api-docs","ui":"/docs"}}
+
+
+
+mc alias set minio http://127.0.0.1:9000 admin password
+mc admin config set minio notify_kafka:1 brokers="ctr-kafka:9992" topic="dit247" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure
+mc admin service restart minio
+mc admin config get minio notify_kafka
+mc event add minio/dit247 arn:minio:sqs::1:kafka --event put
+
+
+
+
+

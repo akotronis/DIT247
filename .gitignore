@@ -7,3 +7,4 @@
 !**/data/nodered/**/flows.*
 
 **/data/minio/**
+!**/data/minio/**/kafka_config.*

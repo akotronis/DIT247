@@ -8,6 +8,42 @@
         "env": []
     },
     {
+        "id": "e976c9069888c66c",
+        "type": "subflow",
+        "name": "Simple Retry",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "bb8080b2cb674a7f"
+                    },
+                    {
+                        "id": "b1bd7fda5ba98b74"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1060,
+                "y": 360,
+                "wires": [
+                    {
+                        "id": "3eb4ec6b71fc383b",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "ef727b9db2adfa22",
         "type": "minio-config",
         "name": "MinIO",
@@ -16,16 +52,398 @@
         "useSsl": false
     },
     {
+        "id": "a2879a264bb699e1",
+        "type": "Kafka Broker",
+        "name": "",
+        "hosts": [
+            {
+                "host": "ctr-kafka",
+                "port": 9992
+            }
+        ],
+        "hostsEnvVar": "",
+        "connectTimeout": "10000",
+        "requestTimeout": "30000",
+        "autoConnect": "true",
+        "idleConnection": "5",
+        "reconnectOnIdle": "true",
+        "maxAsyncRequests": "10",
+        "checkInterval": "10",
+        "selfSign": true,
+        "usetls": false,
+        "useCredentials": false
+    },
+    {
+        "id": "b4eca1de14599dd1",
+        "type": "delay",
+        "z": "e976c9069888c66c",
+        "name": "",
+        "pauseType": "delayv",
+        "timeout": "4",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 400,
+        "y": 260,
+        "wires": [
+            [
+                "a94c8f23b5147d79"
+            ]
+        ]
+    },
+    {
+        "id": "3eb4ec6b71fc383b",
+        "type": "switch",
+        "z": "e976c9069888c66c",
+        "name": "if success",
+        "property": "payload.putObject",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 380,
+        "y": 480,
+        "wires": [
+            [],
+            [
+                "bad4bdb7e00b7a80"
+            ]
+        ]
+    },
+    {
+        "id": "4442b04b4a071572",
+        "type": "function",
+        "z": "e976c9069888c66c",
+        "name": "Increment flow retry counter",
+        "func": "// Retrieve the current value of retry_counter from flow context\nlet retry_counter = flow.get('retry_counter') || 0;\n\n// Increment the retry_counter by 1\nretry_counter++;\n\n// Store the updated value back to flow context\nflow.set('retry_counter', retry_counter);\n\n// Pass the message along\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 160,
+        "wires": [
+            [
+                "08d2ca0448438e07"
+            ]
+        ]
+    },
+    {
+        "id": "bad4bdb7e00b7a80",
+        "type": "switch",
+        "z": "e976c9069888c66c",
+        "name": "if max retries",
+        "property": "retry_counter",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "n_retries",
+                "vt": "flow"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 630,
+        "y": 480,
+        "wires": [
+            [
+                "b4eca1de14599dd1"
+            ],
+            [
+                "0fb09013857b9001"
+            ]
+        ]
+    },
+    {
+        "id": "0fb09013857b9001",
+        "type": "debug",
+        "z": "e976c9069888c66c",
+        "name": "Minio upload error SF",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "a94c8f23b5147d79",
+        "type": "objects",
+        "z": "e976c9069888c66c",
+        "objects_name": "Upload to Minio",
+        "host": "ef727b9db2adfa22",
+        "objects_operation": "putObject",
+        "objects_bucket": "dit247",
+        "objects_object": "msg.objectName",
+        "objects_offset": "",
+        "objects_length": "",
+        "objects_stream": "msg.stream",
+        "objects_size": "",
+        "objects_metadata": "",
+        "objects_sourceobject": "",
+        "objects_conditions": "",
+        "objects_objectslist": [],
+        "objects_prefix": "",
+        "objects_etag": "",
+        "objects_datetime": "",
+        "x": 560,
+        "y": 220,
+        "wires": [
+            [
+                "4442b04b4a071572"
+            ],
+            [
+                "0112c30584db996e"
+            ]
+        ]
+    },
+    {
+        "id": "bb8080b2cb674a7f",
+        "type": "debug",
+        "z": "e976c9069888c66c",
+        "name": "Retry Input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 130,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b1bd7fda5ba98b74",
+        "type": "change",
+        "z": "e976c9069888c66c",
+        "name": "Init flow retry counter",
+        "rules": [
+            {
+                "t": "set",
+                "p": "retry_counter",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 140,
+        "y": 240,
+        "wires": [
+            [
+                "5d04087deb9bf032"
+            ]
+        ]
+    },
+    {
+        "id": "5d04087deb9bf032",
+        "type": "change",
+        "z": "e976c9069888c66c",
+        "name": "Set flow vars from msg",
+        "rules": [
+            {
+                "t": "set",
+                "p": "retry_interval",
+                "pt": "flow",
+                "to": "retry_interval",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "n_retries",
+                "pt": "flow",
+                "to": "n_retries",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "flow",
+                "to": "filename",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "objectName",
+                "pt": "flow",
+                "to": "objectName",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "flow",
+                "to": "retry_interval",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "retry_interval",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 180,
+        "wires": [
+            [
+                "b4eca1de14599dd1"
+            ]
+        ]
+    },
+    {
+        "id": "08d2ca0448438e07",
+        "type": "change",
+        "z": "e976c9069888c66c",
+        "name": "Set msg vars from flow",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "filename",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "objectName",
+                "pt": "msg",
+                "to": "objectName",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "retry_counter",
+                "pt": "msg",
+                "to": "retry_counter",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "delay",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 240,
+        "wires": [
+            [
+                "3eb4ec6b71fc383b",
+                "48cd93b8d6f54c06"
+            ]
+        ]
+    },
+    {
+        "id": "ec8669a64cafd68b",
+        "type": "debug",
+        "z": "e976c9069888c66c",
+        "name": "Set flow vars",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 450,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0112c30584db996e",
+        "type": "debug",
+        "z": "e976c9069888c66c",
+        "name": "Minio error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "48cd93b8d6f54c06",
+        "type": "debug",
+        "z": "e976c9069888c66c",
+        "name": "Counter",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "retry_counter",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1020,
+        "y": 100,
+        "wires": []
+    },
+    {
         "id": "57495aeef88197ca",
         "type": "inject",
         "z": "1b034dd948f70bc1",
         "name": "Input image path",
         "props": [
             {
-                "p": "payload"
+                "p": "filename",
+                "v": "/data/images/test-5.png",
+                "vt": "str"
             },
             {
-                "p": "topic",
+                "p": "objectName",
+                "v": "test-5.png",
                 "vt": "str"
             }
         ],
@@ -34,10 +452,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "/data/images/test.png",
-        "payloadType": "str",
-        "x": 200,
-        "y": 640,
+        "x": 140,
+        "y": 460,
         "wires": [
             [
                 "1a9eeddc4cba9414"
@@ -48,17 +464,17 @@
         "id": "ca6ee7fdfa42d2df",
         "type": "debug",
         "z": "1b034dd948f70bc1",
-        "name": "debug 1",
+        "name": "Image Info",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 780,
-        "y": 560,
+        "x": 850,
+        "y": 380,
         "wires": []
     },
     {
@@ -66,15 +482,15 @@
         "type": "file in",
         "z": "1b034dd948f70bc1",
         "name": "Read image",
-        "filename": "payload",
+        "filename": "filename",
         "filenameType": "msg",
         "format": "",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 430,
-        "y": 640,
+        "x": 370,
+        "y": 460,
         "wires": [
             [
                 "ca6ee7fdfa42d2df",
@@ -109,7 +525,7 @@
         "id": "b9bc2020c42ff38e",
         "type": "inject",
         "z": "1b034dd948f70bc1",
-        "name": "",
+        "name": "dit247",
         "props": [
             {
                 "p": "payload"
@@ -172,11 +588,11 @@
         "id": "0c367a5447a8e962",
         "type": "objects",
         "z": "1b034dd948f70bc1",
-        "objects_name": "",
+        "objects_name": "Upload to Minio",
         "host": "ef727b9db2adfa22",
         "objects_operation": "putObject",
         "objects_bucket": "dit247",
-        "objects_object": "test",
+        "objects_object": "msg.objectName",
         "objects_offset": "",
         "objects_length": "",
         "objects_stream": "msg.payload",
@@ -188,29 +604,32 @@
         "objects_prefix": "",
         "objects_etag": "",
         "objects_datetime": "",
-        "x": 670,
-        "y": 640,
+        "x": 600,
+        "y": 460,
         "wires": [
             [
                 "e88de00b61e279ac"
             ],
-            []
+            [
+                "9643a93cd0eeeabb"
+            ]
         ]
     },
     {
         "id": "e88de00b61e279ac",
         "type": "debug",
         "z": "1b034dd948f70bc1",
-        "name": "debug 4",
+        "name": "Uploaded object",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 900,
-        "y": 640,
+        "x": 860,
+        "y": 440,
         "wires": []
     },
     {
@@ -320,14 +739,161 @@
         "wires": []
     },
     {
-        "id": "1579b89898b1e722",
-        "type": "Kafka Commit",
+        "id": "7380d8596066df37",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Upload image to Minio",
+        "info": "",
+        "x": 140,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "9643a93cd0eeeabb",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Minio upload error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "93fd44a4f799e157",
+        "type": "Kafka Consumer Group",
+        "z": "1b034dd948f70bc1",
+        "name": "From dit247",
+        "broker": "a2879a264bb699e1",
+        "groupId": "aGroup",
+        "sessionTimeout": 15000,
+        "protocol": [
+            "roundrobin"
+        ],
+        "encoding": "utf8",
+        "fromOffset": "latest",
+        "commitOffsetsOnFirstJoin": "true",
+        "outOfRangeOffset": "earliest",
+        "topics": [
+            "dit247"
+        ],
+        "x": 130,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2ddf01df8c4f67aa",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Consumer output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "9db45e750312c223",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Consume Minio bucket event notifications from Kafka broker",
+        "info": "",
+        "x": 260,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "b4e10aac68da31d1",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "Input image path",
+        "props": [
+            {
+                "p": "filename",
+                "v": "/data/images/test-7.png",
+                "vt": "str"
+            },
+            {
+                "p": "objectName",
+                "v": "test-7.png",
+                "vt": "str"
+            },
+            {
+                "p": "n_retries",
+                "v": "6",
+                "vt": "num"
+            },
+            {
+                "p": "retry_interval",
+                "v": "2000",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 140,
+        "y": 660,
+        "wires": [
+            [
+                "4128b11595d08aef"
+            ]
+        ]
+    },
+    {
+        "id": "4128b11595d08aef",
+        "type": "file in",
+        "z": "1b034dd948f70bc1",
+        "name": "Read image",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 350,
+        "y": 660,
+        "wires": [
+            [
+                "c7c95dd1e7ec9b91"
+            ]
+        ]
+    },
+    {
+        "id": "43586bcf09904814",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Upload image to Minio with Retry",
+        "info": "",
+        "x": 170,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "c7c95dd1e7ec9b91",
+        "type": "subflow:e976c9069888c66c",
         "z": "1b034dd948f70bc1",
         "name": "",
-        "x": 180,
-        "y": 400,
+        "x": 550,
+        "y": 660,
         "wires": [
-            [],
             []
         ]
     }

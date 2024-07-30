@@ -13,6 +13,16 @@
 - [Actions](https://github.com/apache/openwhisk/blob/master/docs/actions.md#listing-actions)
 - [Cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
 
+# Minio
+## Kafka bucket notification setup
+Inside the minio container: `docker exec -it ctr-minio bash`
+- `mc alias set minio http://127.0.0.1:9000 admin password`
+- `mc admin config set minio notify_kafka:1 brokers="ctr-kafka:9992" topic="dit247" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
+- `mc admin service restart minio`
+- `mc admin config get minio notify_kafka`
+- `mc event add minio/dit247 arn:minio:sqs::1:kafka --event put`
+[Reference](https://blog.min.io/complex-workflows-apache-kafka-minio/)
+
 # Process management on Windows 11
 `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
 `>>> tasklist /FI "PID eq 19812"` to identify the process

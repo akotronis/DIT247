@@ -5,7 +5,8 @@ FROM nodered/node-red:4.0-debian
 USER node-red
 
 # Install additional Node-RED nodes
-RUN npm install node-red-contrib-kafka-manager node-red-contrib-minio-all
+RUN npm install node-red-contrib-minio-all
+RUN npm install node-red-contrib-kafka-manager
 
 # Start Node-RED
 CMD ["npm", "start", "--", "--userDir", "/data"]
