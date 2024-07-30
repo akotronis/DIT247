@@ -159,7 +159,7 @@ Vagrant.configure("2") do |config|
 
     # Configure wsk cli
     wsk property set --apihost http://127.0.0.1:3233
-    wsk property set --auth `cat ansible/files/auth.guest`
+    wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest`
 
     # Add vagrant user to the docker group
     sudo usermod -aG docker vagrant
@@ -167,7 +167,7 @@ Vagrant.configure("2") do |config|
     cd /dit247
 
     # Run openwhisk
-    # sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./repos/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
+    # sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
 
   SHELL
 end
