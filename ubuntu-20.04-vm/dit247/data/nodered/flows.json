@@ -10,7 +10,7 @@
     {
         "id": "e976c9069888c66c",
         "type": "subflow",
-        "name": "Simple Retry",
+        "name": "Minio Upload with Retry",
         "info": "",
         "category": "",
         "in": [
@@ -452,8 +452,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
-        "y": 460,
+        "x": 160,
+        "y": 420,
         "wires": [
             [
                 "1a9eeddc4cba9414"
@@ -473,8 +473,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 850,
-        "y": 380,
+        "x": 870,
+        "y": 340,
         "wires": []
     },
     {
@@ -489,8 +489,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 370,
-        "y": 460,
+        "x": 390,
+        "y": 420,
         "wires": [
             [
                 "ca6ee7fdfa42d2df",
@@ -505,12 +505,12 @@
         "buckets_name": "Make dit247 bucket",
         "host": "ef727b9db2adfa22",
         "buckets_operation": "makeBucket",
-        "buckets_bucket": "msg.payload",
+        "buckets_bucket": "msg.bucketName",
         "buckets_region": "",
         "buckets_prefix": "",
         "buckets_recursive": false,
         "buckets_start_after": "",
-        "x": 390,
+        "x": 290,
         "y": 100,
         "wires": [
             [
@@ -528,7 +528,9 @@
         "name": "dit247",
         "props": [
             {
-                "p": "payload"
+                "p": "bucketName",
+                "v": "dit247",
+                "vt": "str"
             },
             {
                 "p": "topic",
@@ -540,8 +542,6 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "dit247",
-        "payloadType": "str",
         "x": 130,
         "y": 100,
         "wires": [
@@ -563,7 +563,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
+        "x": 500,
         "y": 80,
         "wires": []
     },
@@ -580,8 +580,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 140,
+        "x": 520,
+        "y": 120,
         "wires": []
     },
     {
@@ -604,8 +604,8 @@
         "objects_prefix": "",
         "objects_etag": "",
         "objects_datetime": "",
-        "x": 600,
-        "y": 460,
+        "x": 620,
+        "y": 420,
         "wires": [
             [
                 "e88de00b61e279ac"
@@ -628,8 +628,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 860,
-        "y": 440,
+        "x": 880,
+        "y": 400,
         "wires": []
     },
     {
@@ -638,8 +638,8 @@
         "z": "1b034dd948f70bc1",
         "name": "Bucket creation",
         "info": "",
-        "x": 140,
-        "y": 60,
+        "x": 500,
+        "y": 20,
         "wires": []
     },
     {
@@ -725,7 +725,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 640,
-        "y": 280,
+        "y": 260,
         "wires": []
     },
     {
@@ -744,8 +744,8 @@
         "z": "1b034dd948f70bc1",
         "name": "Upload image to Minio",
         "info": "",
-        "x": 140,
-        "y": 400,
+        "x": 160,
+        "y": 360,
         "wires": []
     },
     {
@@ -761,8 +761,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
-        "y": 500,
+        "x": 890,
+        "y": 460,
         "wires": []
     },
     {
@@ -783,10 +783,12 @@
         "topics": [
             "dit247"
         ],
-        "x": 130,
-        "y": 860,
+        "x": 150,
+        "y": 780,
         "wires": [
-            []
+            [
+                "2ddf01df8c4f67aa"
+            ]
         ]
     },
     {
@@ -802,8 +804,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 370,
-        "y": 860,
+        "x": 390,
+        "y": 780,
         "wires": []
     },
     {
@@ -812,8 +814,8 @@
         "z": "1b034dd948f70bc1",
         "name": "Consume Minio bucket event notifications from Kafka broker",
         "info": "",
-        "x": 260,
-        "y": 800,
+        "x": 280,
+        "y": 720,
         "wires": []
     },
     {
@@ -848,8 +850,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 140,
-        "y": 660,
+        "x": 160,
+        "y": 620,
         "wires": [
             [
                 "4128b11595d08aef"
@@ -868,8 +870,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 350,
-        "y": 660,
+        "x": 370,
+        "y": 620,
         "wires": [
             [
                 "c7c95dd1e7ec9b91"
@@ -882,8 +884,8 @@
         "z": "1b034dd948f70bc1",
         "name": "Upload image to Minio with Retry",
         "info": "",
-        "x": 170,
-        "y": 600,
+        "x": 190,
+        "y": 520,
         "wires": []
     },
     {
@@ -891,10 +893,192 @@
         "type": "subflow:e976c9069888c66c",
         "z": "1b034dd948f70bc1",
         "name": "",
-        "x": 550,
-        "y": 660,
+        "x": 610,
+        "y": 620,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "2653db1a4a81ce0e",
+        "type": "buckets",
+        "z": "1b034dd948f70bc1",
+        "buckets_name": "Make dit247c bucket",
+        "host": "ef727b9db2adfa22",
+        "buckets_operation": "makeBucket",
+        "buckets_bucket": "msg.bucketName",
+        "buckets_region": "",
+        "buckets_prefix": "",
+        "buckets_recursive": false,
+        "buckets_start_after": "",
+        "x": 940,
+        "y": 100,
+        "wires": [
+            [
+                "c6e5ce32b399d6d5"
+            ],
+            [
+                "b48368596f8ace38"
+            ]
+        ]
+    },
+    {
+        "id": "13aedba99812d38e",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "dit247c",
+        "props": [
+            {
+                "p": "bucketName",
+                "v": "dit247c",
+                "vt": "str"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 770,
+        "y": 100,
+        "wires": [
+            [
+                "2653db1a4a81ce0e"
+            ]
+        ]
+    },
+    {
+        "id": "c6e5ce32b399d6d5",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Created bucket",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b48368596f8ace38",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Bucket creation error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "30ab8280f49e6689",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Init image bucket",
+        "info": "",
+        "x": 140,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "467ec312ca4b5881",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Compressed image bucket",
+        "info": "",
+        "x": 810,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d20b6b4546f3edd5",
+        "type": "http in",
+        "z": "1b034dd948f70bc1",
+        "name": "Minio webhook request",
+        "url": "/compressed-images",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 980,
+        "wires": [
+            [
+                "eca0a0c5eb12b906",
+                "fc361a7ac8c6cd81"
+            ]
+        ]
+    },
+    {
+        "id": "fc361a7ac8c6cd81",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Webhook output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "b4d918734d429aa9",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Receive Minio webhook request from compressed image upload",
+        "info": "",
+        "x": 290,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "eca0a0c5eb12b906",
+        "type": "http response",
+        "z": "1b034dd948f70bc1",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 400,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "3b6866763d1d539e",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Change response code to 400 to test minio's retry configuration",
+        "info": "",
+        "x": 290,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "7d09e6983466027a",
+        "type": "comment",
+        "z": "1b034dd948f70bc1",
+        "name": "Stop Minio service to test retry pattern",
+        "info": "",
+        "x": 210,
+        "y": 560,
+        "wires": []
     }
 ]

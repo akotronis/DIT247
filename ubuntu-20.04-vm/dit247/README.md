@@ -16,12 +16,40 @@
 # Minio
 ## Kafka bucket notification setup
 Inside the minio container: `docker exec -it ctr-minio bash`
-- `mc alias set minio http://127.0.0.1:9000 admin password`
-- `mc admin config set minio notify_kafka:1 brokers="ctr-kafka:9992" topic="dit247" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
-- `mc admin service restart minio`
-- `mc admin config get minio notify_kafka`
-- `mc event add minio/dit247 arn:minio:sqs::1:kafka --event put`
+- Set alias for minio service:  
+  `>>> mc alias set minio http://127.0.0.1:9000 admin password`
+- Configure kafka notiications on topic **dit247**:  
+  `>>> mc admin config set minio notify_kafka:1 brokers="ctr-kafka:9992" topic="dit247" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
+- Configure kafka notiications on topic **dit247c**:  
+  `>>> mc admin config set minio notify_kafka:2 brokers="ctr-kafka:9992" topic="dit247c" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
+- Restart minio service:  
+  `>>> mc admin service restart minio`
+- Verify configuration:  
+  `>>> mc admin config get minio notify_kafka`
+- Add event on bucket **dit247** for notiication coniguration 1:  
+  `>>> mc event add minio/dit247 arn:minio:sqs::1:kafka --event put`
+- Add event on bucket **dit247c** for notiication coniguration 2:  
+  `>>> mc event add minio/dit247c arn:minio:sqs::2:kafka --event put`
+- To Disable event and notification configuration:  
+  `>>> mc event remove minio/dit247c arn:minio:sqs::2:kafka --event put`
+  `>>> mc admin config set minio notify_kafka:2 enable=off`
+  `>>> mc admin service restart minio`
 [Reference](https://blog.min.io/complex-workflows-apache-kafka-minio/)
+
+## Webhook bucket notification setup
+- Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-images**:  
+  `>>> mc admin config set minio notify_webhook:1 endpoint="http://ctr-nodered:1880/compressed-images" queue_limit="10000" queue_dir="/tmp" queue_retry_interval="1s" enable="on"`
+- Restart minio service:  
+  `>>> mc admin service restart minio`
+- Verify configuration:  
+  `>>> mc admin config get minio notify_webhook`
+- Add event on bucket **dit247c** for notiication coniguration:  
+  `>>> mc event add minio/dit247c arn:minio:sqs::1:webhook --event put`
+- To Disable event and notification configuration:  
+  `>>> mc event remove minio/dit247c arn:minio:sqs::1:webhook --event put`
+  `>>> mc admin config set minio notify_webhook:1 enable=off`
+  `>>> mc admin service restart minio`
+
 
 # Process management on Windows 11
 `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
