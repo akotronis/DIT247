@@ -434,29 +434,18 @@
         "id": "57495aeef88197ca",
         "type": "inject",
         "z": "1b034dd948f70bc1",
-        "name": "Input image path",
-        "props": [
-            {
-                "p": "filename",
-                "v": "/data/images/test-5.png",
-                "vt": "str"
-            },
-            {
-                "p": "objectName",
-                "v": "test-5.png",
-                "vt": "str"
-            }
-        ],
+        "name": "Trigger file upload",
+        "props": [],
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 160,
+        "x": 170,
         "y": 420,
         "wires": [
             [
-                "1a9eeddc4cba9414"
+                "72b1d545ca225215"
             ]
         ]
     },
@@ -473,7 +462,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
+        "x": 1030,
         "y": 340,
         "wires": []
     },
@@ -489,7 +478,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 390,
+        "x": 590,
         "y": 420,
         "wires": [
             [
@@ -604,7 +593,7 @@
         "objects_prefix": "",
         "objects_etag": "",
         "objects_datetime": "",
-        "x": 620,
+        "x": 780,
         "y": 420,
         "wires": [
             [
@@ -619,7 +608,7 @@
         "id": "e88de00b61e279ac",
         "type": "debug",
         "z": "1b034dd948f70bc1",
-        "name": "Uploaded object",
+        "name": "Minio uploaded object",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -628,7 +617,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 880,
+        "x": 1060,
         "y": 400,
         "wires": []
     },
@@ -742,9 +731,9 @@
         "id": "7380d8596066df37",
         "type": "comment",
         "z": "1b034dd948f70bc1",
-        "name": "Upload image to Minio",
+        "name": "Upload singe image to Minio",
         "info": "",
-        "x": 160,
+        "x": 180,
         "y": 360,
         "wires": []
     },
@@ -761,7 +750,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 890,
+        "x": 1050,
         "y": 460,
         "wires": []
     },
@@ -822,18 +811,9 @@
         "id": "b4e10aac68da31d1",
         "type": "inject",
         "z": "1b034dd948f70bc1",
-        "name": "Input image path",
+        "d": true,
+        "name": "Repeatedly trigger file upload",
         "props": [
-            {
-                "p": "filename",
-                "v": "/data/images/test-7.png",
-                "vt": "str"
-            },
-            {
-                "p": "objectName",
-                "v": "test-7.png",
-                "vt": "str"
-            },
             {
                 "p": "n_retries",
                 "v": "6",
@@ -845,16 +825,16 @@
                 "vt": "num"
             }
         ],
-        "repeat": "",
+        "repeat": "5",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 160,
+        "x": 210,
         "y": 620,
         "wires": [
             [
-                "4128b11595d08aef"
+                "f29d16a230645358"
             ]
         ]
     },
@@ -870,7 +850,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 370,
+        "x": 670,
         "y": 620,
         "wires": [
             [
@@ -882,9 +862,9 @@
         "id": "43586bcf09904814",
         "type": "comment",
         "z": "1b034dd948f70bc1",
-        "name": "Upload image to Minio with Retry",
+        "name": "Upload successive images to Minio with Retry",
         "info": "",
-        "x": 190,
+        "x": 230,
         "y": 520,
         "wires": []
     },
@@ -893,7 +873,7 @@
         "type": "subflow:e976c9069888c66c",
         "z": "1b034dd948f70bc1",
         "name": "",
-        "x": 610,
+        "x": 910,
         "y": 620,
         "wires": [
             []
@@ -1075,10 +1055,50 @@
         "id": "7d09e6983466027a",
         "type": "comment",
         "z": "1b034dd948f70bc1",
-        "name": "Stop Minio service to test retry pattern",
+        "name": "Stop Minio service|Change repeat option to test retry pattern",
         "info": "",
-        "x": 210,
+        "x": 280,
         "y": 560,
         "wires": []
+    },
+    {
+        "id": "72b1d545ca225215",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "File random choice",
+        "func": "// Generate a random integer between 1 and 631\nvar x = Math.floor(Math.random() * 631) + 1;\n\n// Format the string\nmsg.filename = `/data/images/file-${x}.jpg`;\n\nmsg.objectName = `file-${x}.jpg`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 420,
+        "wires": [
+            [
+                "1a9eeddc4cba9414"
+            ]
+        ]
+    },
+    {
+        "id": "f29d16a230645358",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "File random choice",
+        "func": "// Generate a random integer between 1 and 631\nvar x = Math.floor(Math.random() * 631) + 1;\n\n// Format the string\nmsg.filename = `/data/images/file-${x}.jpg`;\n\nmsg.objectName = `file-${x}.jpg`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 620,
+        "wires": [
+            [
+                "4128b11595d08aef"
+            ]
+        ]
     }
 ]

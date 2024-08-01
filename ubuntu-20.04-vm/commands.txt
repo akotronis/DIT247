@@ -72,5 +72,20 @@ mc event add minio/dit247 arn:minio:sqs::1:kafka --event put
 
 
 
+>>> sudo apt install -y python3-pip
+>>> python3 -m pip install virtualenv
+>>> export PATH=$PATH:/home/vagrant/.local/bin
+>>> virtualenv action/virtualenv
+If the last doesn't work, then
+	>>> virtualenv ~/action/virtualenv
+Assuming the last:
+>>> source ~/action/virtualenv/bin/activate
+>>> echo pillow==10.4.0 >> ~/action/requirements.txt
+>>> python3 -m pip install -r ~/action/requirements.txt 
+Create a __main__.py inside ~/action with the action code
+>>> zip -r action.zip ~/action/virtualenv ~/action/__main__.py ~/action/requirements.txt
+>>> wsk action create action --kind python:3.10 --main main ~/action.zip
+
+
 
 
