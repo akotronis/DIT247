@@ -1,6 +1,6 @@
+# .env
 .vagrant
-*.env
-
+**/__pycache__/**
 **/repos/
 
 **/data/nodered/**
