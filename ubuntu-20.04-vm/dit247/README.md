@@ -95,8 +95,6 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 
   sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
 
-  sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ./bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
-
 # FLOW
 - Minio 
 
@@ -105,3 +103,28 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - Minio sends file info to Kafka (Producer)
 - Openwhisk listens to Kafka (Consumer)
 - Openwhisk gets file from Minio compresses it and sends it to a different folder on `/compressed`
+
+# VM
+If with
+- `>>> vagrant up` and/or
+- `>>> vagrant up --provision`
+
+the `.vagrant/machines/virtualbox/private_key` is not generated, then `vagrnat ssh` connects to the vm and 
+- `>>> vagrant ssh-config` will use the `~/.vagrant.d/insecure_private_keys` keys.
+
+Running
+- `>>> vagrant reload` may generate the `.vagrant/machines/virtualbox/private_key` so
+- `>>> vagrant ssh-config` will use the `Vagrantfile folder path/.vagrant/machines/default/virtualbox/private_key` keys.
+
+In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the output of `>>> vagrant ssh-config`
+
+## ssh issue
+Generally run
+- `>>> vagrant up (--provision)` (`.vagrant/machines/virtualbox/private_key` is expected to NOT be created)
+- `>>> vagrant reload` (maybe more than once)
+  - (`.vagrant/machines/virtualbox/private_key` is expected to BE created)
+  - (is expeted to NOT be able to ssh), then  
+- `>>> vagrant up (--provision)`
+- `vagrant ssh` to check if it can ssh (is expected to BE able to ssh)
+- `>>> vagrant ssh-config` to update with its output the `~/.ssh/config`
+- Connect with VSCode to the vm
