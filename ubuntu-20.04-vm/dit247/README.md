@@ -150,4 +150,6 @@ Generally run
     &emsp;PasswordAuthentication yes  
     &emsp;PreferredAuthentications password
 - Remove from `C:\Users\<User>\.ssh\known_hosts` the `[127.0.0.1]:2222` lines defining ssh keys
-- `vagrant ssh` to vm and change on `/etc/ssh/sshd_config` setting `PasswordAuthentication` to `yes`
+- `vagrant ssh` to vm and
+  - change on `/etc/ssh/sshd_config` setting `PasswordAuthentication` to `yes`
+  - run `>>> sudo systemctl restart sshd`
