@@ -34,7 +34,7 @@ Inside the minio container: `docker exec -it ctr-minio bash`
   - `>>> mc event remove minio/dit247c arn:minio:sqs::2:kafka --event put`
   - `>>> mc admin config set minio notify_kafka:2 enable=off`
   - `>>> mc admin service restart minio`  
-  
+
 [Reference](https://blog.min.io/complex-workflows-apache-kafka-minio/)
 
 ## Webhook bucket notification setup
@@ -154,3 +154,7 @@ Generally run
 - `vagrant ssh` to vm and
   - change on `/etc/ssh/sshd_config` setting `PasswordAuthentication` to `yes`
   - run `>>> sudo systemctl restart sshd`
+
+## add private key to `~/.ssh`
+- Must do `chmod 700 ~/.ssh`
+- Must do `chmod 600 ~/.ssh/id_ed25519`, `chmod 600 ~/.ssh/id_rsa`
