@@ -31,9 +31,10 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - Add event on bucket **dit247c** for notiication coniguration 2:  
   `>>> mc event add minio/dit247c arn:minio:sqs::2:kafka --event put`
 - To Disable event and notification configuration:  
-  `>>> mc event remove minio/dit247c arn:minio:sqs::2:kafka --event put`
-  `>>> mc admin config set minio notify_kafka:2 enable=off`
-  `>>> mc admin service restart minio`
+  - `>>> mc event remove minio/dit247c arn:minio:sqs::2:kafka --event put`
+  - `>>> mc admin config set minio notify_kafka:2 enable=off`
+  - `>>> mc admin service restart minio`  
+  
 [Reference](https://blog.min.io/complex-workflows-apache-kafka-minio/)
 
 ## Webhook bucket notification setup
@@ -46,18 +47,18 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - Add event on bucket **dit247c** for notiication coniguration:  
   `>>> mc event add minio/dit247c arn:minio:sqs::1:webhook --event put`
 - To Disable event and notification configuration:  
-  `>>> mc event remove minio/dit247c arn:minio:sqs::1:webhook --event put`
-  `>>> mc admin config set minio notify_webhook:1 enable=off`
-  `>>> mc admin service restart minio`
+  - `>>> mc event remove minio/dit247c arn:minio:sqs::1:webhook --event put`
+  - `>>> mc admin config set minio notify_webhook:1 enable=off`
+  - `>>> mc admin service restart minio`
 
 
 # Process management on Windows 11
-`>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
-`>>> tasklist /FI "PID eq 19812"` to identify the process
-`>>> taskkill /PID 19812 /F` to kill the process
-`>>> tasklist | findstr /I "VBox"` to print the processes that run under Image Name starting with `VBox`
-`>>> netstat -aon | findstr /R /C:"31900" /C:"32076"` to see on which port these process ids are listening to
-`>>> ForEach ($processId in (netstat -aon | Select-String ":9000" | ForEach-Object { $_.ToString().Split()[-1] })) { taskkill /PID $processId /F }` to kill processes running on port 9000
+- `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
+- `>>> tasklist /FI "PID eq 19812"` to identify the process
+- `>>> taskkill /PID 19812 /F` to kill the process
+- `>>> tasklist | findstr /I "VBox"` to print the processes that run under Image Name starting with `VBox`
+- `>>> netstat -aon | findstr /R /C:"31900" /C:"32076"` to see on which port these process ids are listening to
+- `>>> ForEach ($processId in (netstat -aon | Select-String ":9000" | ForEach-Object { $_.ToString().Split()[-1] })) { taskkill /PID $processId /F }` to kill processes running on port 9000
 
 # UIs
 ## Couch DB
