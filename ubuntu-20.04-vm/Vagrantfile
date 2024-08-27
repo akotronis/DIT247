@@ -2,67 +2,75 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  # config.vm.box = "ubuntu/focal64"
   config.vm.box = "bento/ubuntu-20.04"
+  # config.vm.synced_folder "./dit247", "/dit247", id: "vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=775,fmode=600"]
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.boot_timeout = 25
   config.ssh.keep_alive = true
-  config.ssh.private_key_path = "~/.ssh/id_rsa"
-  config.ssh.forward_agent = true
+  config.ssh.extra_args = ["-o", "LogLevel=DEBUG"]
+
+  # config.ssh.private_key_path = "~/.ssh/id_rsa"
+  # config.ssh.forward_agent = true
+
+  config.ssh.insert_key = false  # Prevent Vagrant from inserting its own key
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+  config.ssh.forward_agent = false
+
   config.vm.provider "virtualbox" do |vb|
     vb.name = "DIT247"
     vb.gui = false
     vb.memory = "4096" # "2048"
     vb.cpus = 2
   end
-  # config.vm.provision "shell", inline: <<-SHELL
-    # sudo apt-get update && apt-get install -y \
-    # python3-pip \
-    # openjdk-8-jdk \
-    # nodejs \
-    # npm \
-    # git \
-    # curl \
-    # zip \
-    # docker.io \
-    # tar \
-    # lsof \
-    # && apt-get clean
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update && apt-get install -y \
+    python3-pip \
+    openjdk-8-jdk \
+    nodejs \
+    npm \
+    git \
+    curl \
+    zip \
+    docker.io \
+    tar \
+    lsof \
+    && apt-get clean
 
-    # # Download docker compose
-    # sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-    # && chmod +x /usr/local/bin/docker-compose
+    # Download docker compose
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
 
-    # # Download wsk cli
-    # sudo curl -L "https://github.com/apache/openwhisk-cli/releases/download/1.2.0/OpenWhisk_CLI-1.2.0-linux-amd64.tgz" -o OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo tar -xzf OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo chmod +x wsk
-    # sudo mv wsk /usr/local/bin/
-    # sudo rm OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo rm LICENSE.txt
-    # sudo rm NOTICE.txt
+    # Download wsk cli
+    sudo curl -L "https://github.com/apache/openwhisk-cli/releases/download/1.2.0/OpenWhisk_CLI-1.2.0-linux-amd64.tgz" -o OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo tar -xzf OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo chmod +x wsk
+    sudo mv wsk /usr/local/bin/
+    sudo rm OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo rm LICENSE.txt
+    sudo rm NOTICE.txt
     
-    # # Verify installations
-    # java -version
-    # docker --version
-    # docker-compose --version
-    # wsk --help
+    # Verify installations
+    java -version
+    docker --version
+    docker-compose --version
+    wsk --help
 
-    # # Download openwhisk
-    # sudo git clone https://github.com/apache/openwhisk.git
+    # Download openwhisk
+    sudo git clone https://github.com/apache/openwhisk.git
 
-    # cd openwhisk
+    cd openwhisk
 
-    # # Build jar
-    # sudo ./gradlew --info :core:standalone:build
+    # Build jar
+    sudo ./gradlew --info :core:standalone:build
 
-    # # Configure wsk cli
-    # wsk property set --apihost http://127.0.0.1:3233
-    # wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest`
+    # Configure wsk cli
+    wsk property set --apihost http://127.0.0.1:3233
+    wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest`
 
-    # # Add vagrant user to the docker group
-    # sudo usermod -aG docker vagrant
+    # Add vagrant user to the docker group
+    sudo usermod -aG docker vagrant
 
-    # cd /dit247
-  # SHELL
+    cd /code
+  SHELL
 end

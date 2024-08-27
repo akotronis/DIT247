@@ -128,3 +128,26 @@ Generally run
 - `vagrant ssh` to check if it can ssh (is expected to BE able to ssh)
 - `>>> vagrant ssh-config` to update with its output the `~/.ssh/config`
 - Connect with VSCode to the vm
+
+## ssh-agent
+- Start: `>>> eval $(ssh-agent -s)`
+- List keys: `>>> ssh-add -L`
+- Add key from file: `>>> ssh-add ~/.ssh/id_rsa`
+
+## ssh with command passing private key file
+- `>>> ssh -p 2222 -i C:/ANASTASIS/HUA/SEMESTER-4/DIT247-Cloud-Services/Project/ubuntu-20.04-vm/.vagrant/machines/default/virtualbox/private_key vagrant@127.0.0.1 -o LogLevel=DEBUG`
+- `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_key vagrant@127.0.0.1 -o LogLevel=DEBUG`
+- `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_keys/vagrant.key.rsa vagrant@127.0.0.1 -o LogLevel=DEBUG`
+- `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_keys/vagrant.key.ed25519 vagrant@127.0.0.1 -o LogLevel=DEBUG`
+- `>>> ssh -p 2222 -i ~/.ssh/id_rsa akotronis@127.0.0.1 -o LogLevel=DEBUG`
+
+## ssh to vm with password
+- host `config` file (for VSCode)  
+  > Host DIT247  
+    &emsp;HostName 127.0.0.1  
+    &emsp;Port 2222  
+    &emsp;User vagrant  
+    &emsp;PasswordAuthentication yes  
+    &emsp;PreferredAuthentications password
+- Remove from `C:\Users\<User>\.ssh\known_hosts` the `[127.0.0.1]:2222` lines defining ssh keys
+- `vagrant ssh` to vm and change on `/etc/ssh/sshd_config` setting `PasswordAuthentication` to `yes`
