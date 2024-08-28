@@ -60,23 +60,29 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - `>>> netstat -aon | findstr /R /C:"31900" /C:"32076"` to see on which port these process ids are listening to
 - `>>> ForEach ($processId in (netstat -aon | Select-String ":9000" | ForEach-Object { $_.ToString().Split()[-1] })) { taskkill /PID $processId /F }` to kill processes running on port 9000
 
+# Port Forwards
+- 1880 (Nodered UI)
+- 9991 (Minio UI)
+- 8080 (Kafka UI)
+- 5984 (CouchDB UI)
+- 3233 (Openwisk API. Not required. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
+- 3232 (Openwisk playground. Not required.)
+- 8025 (Mailhog UI, if used)
+
 # UIs
 ## Couch DB
 - http://localhost:5984/_utils/#login
 
 ## Node Red
-- http://localhost:1880
+- http://localhost:1880/#flow/1b034dd948f70bc1
 
 ## MailHog
-- http://localhost:8025
+- http://localhost:8025/
 
 ## Minio
-- http://localhost:9991
+- http://localhost:9991/browser
 
 ## Openwhisk
-
-- `build0.gradle` is the file from the [repo](https://github.com/apache/openwhisk/blob/master/core/standalone/build.gradle)
-- `build.gradle` is the file with the modifucations required in order for `>>> /gradlew --info :core:standalone:build` to run successfully
 
 - Web UI: http://localhost:3232
 - Config Info: http://localhost:3233
