@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
       echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
     fi
     # Restart sshd (be ssh or sth in other linux versions)
-    systemctl restart sshd
+    # systemctl restart sshd
 
     # Set root password
     echo "root:root" | sudo chpasswd
@@ -50,36 +50,37 @@ Vagrant.configure("2") do |config|
     sudo curl -L "https://github.com/docker/compose/releases/download/1.28.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 
-    # # Download wsk cli
-    # sudo curl -L "https://github.com/apache/openwhisk-cli/releases/download/1.2.0/OpenWhisk_CLI-1.2.0-linux-amd64.tgz" -o OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo tar -xzf OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo chmod +x wsk
-    # sudo mv wsk /usr/local/bin/
-    # sudo rm OpenWhisk_CLI-1.2.0-linux-amd64.tgz
-    # sudo rm LICENSE.txt
-    # sudo rm NOTICE.txt
+    # Download wsk cli
+    sudo curl -L "https://github.com/apache/openwhisk-cli/releases/download/1.2.0/OpenWhisk_CLI-1.2.0-linux-amd64.tgz" -o OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo tar -xzf OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo chmod +x wsk
+    sudo mv wsk /usr/local/bin/
+    sudo rm OpenWhisk_CLI-1.2.0-linux-amd64.tgz
+    sudo rm LICENSE.txt
+    sudo rm NOTICE.txt
     
-    # # Verify installations
-    # java -version
-    # docker --version
-    # docker-compose --version
-    # wsk --help
+    # Verify installations
+    java -version
+    docker --version
+    docker-compose --version
+    wsk --help
 
-    # # Download openwhisk
-    # sudo git clone https://github.com/apache/openwhisk.git
+    # Download openwhisk
+    sudo git clone https://github.com/apache/openwhisk.git
 
-    # cd openwhisk
+    cd openwhisk
 
-    # # Build jar
-    # sudo ./gradlew --info :core:standalone:build
+    # Build jar
+    sudo ./gradlew --info :core:standalone:build
 
-    # # Configure wsk cli
-    # wsk property set --apihost http://127.0.0.1:3233
-    # wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest`
+    # Configure wsk cli
+    wsk property set --apihost http://127.0.0.1:3233
+    wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest`
 
     # Add vagrant user to the docker group
     sudo usermod -aG docker vagrant
 
+    # Remember to share ./../dit247 folder through VirtualBox to /home/vagrant/dit247
     cd /home/vagrant/dit247
   SHELL
 end
