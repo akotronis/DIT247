@@ -27,8 +27,9 @@ Vagrant.configure("2") do |config|
     if ! grep -q "^PasswordAuthentication yes" /etc/ssh/sshd_config; then
       echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
     fi
-    # Restart sshd (be ssh or sth in other linux versions)
-    # systemctl restart sshd
+    # Restart sshd (maybe ssh or sth in other linux versions)
+    # Comment out if "error occurred in the underlying SSH library that Vagrant uses" on >>> vargant provision
+    sudo systemctl restart sshd
 
     # Set root password
     echo "root:root" | sudo chpasswd

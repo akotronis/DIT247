@@ -170,4 +170,6 @@ Generally run
    - **Folder Name** : the path on the vm
    - **Mount Point** : the path on the vm to mount the folder with the above folder name
    - Select **Auto mount** and **Make Permanent**
-  - In the vm, add vagrant logged in user to `vboxsf` group (mounted folder will be of user `root` and group `vboxsf`) `>>> sudo usermod -aG vboxsf $(whoami)`
+  - In the vm, add vagrant logged in user to `vboxsf` group (mounted folder will be of user `root` and group `vboxsf`)
+    - `>>> sudo usermod -aG vboxsf $(whoami)`
+    - `>>> groups` to verify logged in user is in `vboxsf` group
