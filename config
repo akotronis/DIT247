@@ -1,0 +1,42 @@
+# Read more about SSH config files: https://linux.die.net/man/5/ssh_config
+Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+
+Host DIT247r
+    HostName 127.0.0.1
+    Port 2222
+    User root
+    PasswordAuthentication yes
+    PubkeyAuthentication no
+    PreferredAuthentications password
+    LogLevel DEBUG
+
+Host DIT247v
+    HostName 127.0.0.1
+    Port 2222
+    User vagrant
+    PasswordAuthentication yes
+    PubkeyAuthentication no
+    PreferredAuthentications password
+    LogLevel DEBUG
+
+Host DIT247vic-rsa
+    HostName 127.0.0.1
+    User vagrant
+    Port 2222
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    IdentityFile ~/.vagrant.d/insecure_private_keys/vagrant.key.rsa
+    IdentitiesOnly yes
+    LogLevel DEBUG
+
+Host DIT247vic-ed25519
+    HostName 127.0.0.1
+    User vagrant
+    Port 2222
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    IdentityFile ~/.vagrant.d/insecure_private_keys/vagrant.key.ed25519
+    IdentitiesOnly yes
+    LogLevel DEBUG

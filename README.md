@@ -135,26 +135,39 @@ Generally run
 - List keys: `>>> ssh-add -L`
 - Add key from file: `>>> ssh-add ~/.ssh/id_rsa`
 
-## ssh with command passing private key file
+## ssh with command passing private key file or password
 - `>>> ssh -p 2222 -i C:/ANASTASIS/HUA/SEMESTER-4/DIT247-Cloud-Services/Project/ubuntu-20.04-vm/.vagrant/machines/default/virtualbox/private_key vagrant@127.0.0.1 -o LogLevel=DEBUG`
 - `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_key vagrant@127.0.0.1 -o LogLevel=DEBUG`
 - `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_keys/vagrant.key.rsa vagrant@127.0.0.1 -o LogLevel=DEBUG`
 - `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_keys/vagrant.key.ed25519 vagrant@127.0.0.1 -o LogLevel=DEBUG`
-- `>>> ssh -p 2222 -i ~/.ssh/id_rsa akotronis@127.0.0.1 -o LogLevel=DEBUG`
+- `>>> ssh -p 2222 vagrant@127.0.0.1 -o LogLevel=DEBUG` (vagrant)
+- `>>> ssh -p 2222 root@127.0.0.1 -o LogLevel=DEBUG` (root)
 
 ## ssh to vm with password
-- host `config` file (for VSCode)  
-  > Host DIT247  
-    &emsp;HostName 127.0.0.1  
-    &emsp;Port 2222  
-    &emsp;User vagrant  
-    &emsp;PasswordAuthentication yes  
-    &emsp;PreferredAuthentications password
-- Remove from `C:\Users\<User>\.ssh\known_hosts` the `[127.0.0.1]:2222` lines defining ssh keys
-- `vagrant ssh` to vm and
+- host `config` file (see committed `config` file)
+- Remove from `~/.ssh/known_hosts` the `[127.0.0.1]:2222` lines defining ssh keys
+- `vagrant ssh` to vm and do the below or set it in vagrantfile provision
   - change on `/etc/ssh/sshd_config` setting `PasswordAuthentication` to `yes`
   - run `>>> sudo systemctl restart sshd`
 
 ## add private key to `~/.ssh`
 - Must do `chmod 700 ~/.ssh`
 - Must do `chmod 600 ~/.ssh/id_ed25519`, `chmod 600 ~/.ssh/id_rsa`
+
+## Get public key from private key
+- `>>> ssh-keygen -y -f /path/to/private_key > extracted_public_key.pub`
+
+## ssh/config files
+- https://linux.die.net/man/5/ssh_config
+- https://www.ssh.com/academy/ssh/config
+- [Understanding SSH StrictHostKeyChecking Option](https://www.howtouselinux.com/post/ssh-stricthostkeychecking-option)
+- [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
+
+# synced folder
+ Syncing folder with vagrant doesnt seem to work
+ - Add a shared folder to the vm from VirtualBox settings
+   - **Folder Path** : the path on host
+   - **Folder Name** : the path on the vm
+   - **Mount Point** : the path on the vm to mount the folder with the above folder name
+   - Select **Auto mount** and **Make Permanent**
+  - In the vm, add vagrant logged in user to `vboxsf` group (mounted folder will be of user `root` and group `vboxsf`) `>>> sudo usermod -aG vboxsf $(whoami)`
