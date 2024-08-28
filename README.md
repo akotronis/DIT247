@@ -71,7 +71,7 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - http://localhost:8025
 
 ## Minio
-- http://localhost:9000
+- http://localhost:9991
 
 ## Openwhisk
 

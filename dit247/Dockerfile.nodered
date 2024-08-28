@@ -1,8 +1,9 @@
 # Use the official Node-RED image as the base
 FROM nodered/node-red:4.0-debian
 
+# USER node-red
 # Switch to the Node-RED user to install additional nodes
-USER node-red
+USER root
 
 # Install additional Node-RED nodes
 RUN npm install node-red-contrib-minio-all
