@@ -29,23 +29,6 @@
   - `>>> ssh -p 2222 vagrant@127.0.0.1 -o LogLevel=DEBUG` (vagrant)
   - `>>> ssh -p 2222 root@127.0.0.1 -o LogLevel=DEBUG` (root)
 
-
-## Openwhisk
-- Web UI: http://localhost:3232
-- Config Info: http://localhost:3233
-- Run `>>> docker logs ctr-openwhisk | grep auth` to get the info  
-  `wsk property set --apihost 'API_HOST' --auth 'AUTH_KEY'`
-- Run inside the container
-  - `>>> wsk property set --apihost http://ctr-openwhisk:3233 --auth AUTH_KEY` to set credentials
-  - `>>> wsk namespace list` to verify `guest` namespace is set. If not
-    - `>>> echo "NAMESPACE=guest" >> ~/.wskprops`
-  - Verifications:
-    - `>>> wsk list -v` to verify host connection and credentials
-    - `>>> wsk property get` to verify configuration
-- [wsk cli docs](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
-- [Openwhisk swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/openwhisk/openwhisk/master/core/controller/src/main/resources/apiv1swagger.json#/Actions/invokeActionInPackage)
-
-
 # Launch and test the flow
 ### Prerequisites: Synced folder
  Syncing folder with vagrant doesnt seem to work
@@ -57,31 +40,47 @@
   - In the vm, add vagrant logged in user to `vboxsf` group (mounted folder will be of user `root` and group `vboxsf`)
     - `>>> sudo usermod -aG vboxsf $(whoami)`
     - `>>> groups` to verify logged in user is in `vboxsf` group
-
+### Prerequisites: Configurations: Openwhisk (wsk cli)
+- Verify `wsk` client installation from vagrant provisioning `>>> wsk --help`
+- API host:
+  - Verify if API host is set `>>> wsk property get` (This should have been done from vagrant provisioning)
+  - if not, set it `>>> wsk property set --apihost http://127.0.0.1:3233`
+- Credentials:
+  - Verify credentials are set `>>> wsk property get --auth` (This should have been done from vagrant provisioning)
+  - if not verified, set them ``>>> wsk property set --auth `cat ~/openwhisk/ansible/files/auth.guest` ``
+- API host/Credentials/namespace:
+  - Verify host and connection credentials `>>> wsk list -v` or by
+  - `>>> cat ~/.wskprops`
+  - Verify `guest` namespace exists by `>>> wsk namespace list`
+### Prerequisites: Configurations: Kafka
+Make sure a `dit247` topic exists on kafka. If not create it from the UI
+(This might be created automatically when the nodered consumer node that listens on it is up)
 ### Prerequisites: Configurations: Minio
+Log in to the container: `>>> docker exec -it ctr-minio bash`
 #### [Kafka bucket notification setup](https://blog.min.io/complex-workflows-apache-kafka-minio/)
-Inside the minio container: `docker exec -it ctr-minio bash`
 - Set alias for minio service:  
   `>>> mc alias set minio http://127.0.0.1:9000 admin password`
 - Configure kafka notiications on topic **dit247**:  
   `>>> mc admin config set minio notify_kafka:1 brokers="ctr-kafka:9992" topic="dit247" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
-- Configure kafka notiications on topic **dit247c**:  
-  `>>> mc admin config set minio notify_kafka:2 brokers="ctr-kafka:9992" topic="dit247c" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure`
+<!-- - Configure kafka notiications on topic **dit247c**:  
+  `>>> mc admin config set minio notify_kafka:2 brokers="ctr-kafka:9992" topic="dit247c" tls_skip_verify="off" queue_dir="" queue_limit="0" sasl="off" sasl_password="" sasl_username="" tls_client_auth="0" tls="off" client_tls_cert="" client_tls_key="" version="" --insecure` -->
 - Restart minio service:  
   `>>> mc admin service restart minio`
 - Verify configuration:  
   `>>> mc admin config get minio notify_kafka`
+- Make sure buckets **dit247** and **dit247c** are created through the nodered flow
 - Add event on bucket **dit247** for notiication coniguration 1:  
   `>>> mc event add minio/dit247 arn:minio:sqs::1:kafka --event put`
-- Add event on bucket **dit247c** for notiication coniguration 2:  
-  `>>> mc event add minio/dit247c arn:minio:sqs::2:kafka --event put`
+<!-- - Add event on bucket **dit247c** for notiication coniguration 2:  
+  `>>> mc event add minio/dit247c arn:minio:sqs::2:kafka --event put` -->
 - To Disable event and notification configuration:  
   - `>>> mc event remove minio/dit247c arn:minio:sqs::2:kafka --event put`
   - `>>> mc admin config set minio notify_kafka:2 enable=off`
   - `>>> mc admin service restart minio`  
 
 #### Webhook bucket notification setup
-- Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-images**:  
+Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-images**:  
+- Make sure bucket **dit247c** is created through the nodered flow
   `>>> mc admin config set minio notify_webhook:1 endpoint="http://ctr-nodered:1880/compressed-images" queue_limit="10000" queue_dir="/tmp" queue_retry_interval="1s" enable="on"`
 - Restart minio service:  
   `>>> mc admin service restart minio`
@@ -111,6 +110,13 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - `>>> docker-compose up -d` (or `>>> docker-compose up -d -build` if needed) in `~/dit247`
 - Check the forwarded ports from browser in the above urls and
 - make sure the containers are Up with `>>> docker ps -a`
+
+### Test the flow
+- Bucket list
+  - Run the inject node on Bucket list section to list minio buckets (They should already be there from **Prerequisites: Configurations** stage)
+- Upload image to minio
+  - Make sure a folder the folder `~/dit247/data/nodered/images` exists in the vm with files with names `file-1.jpg, file-2.jpg, ...`
+  - If not, run `>>> python3 -m python.rename_files` from `~/dit247` to rename them
 
 
 # General guides
@@ -162,12 +168,14 @@ In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the o
   - https://docs.couchdb.org/en/stable/config/auth.html#config-admins
 
 - **Openwhisk**
+  - [Openwhisk swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/openwhisk/openwhisk/master/core/controller/src/main/resources/apiv1swagger.json#/Actions/invokeActionInPackage)
   - **Apache**: https://openwhisk.apache.org/documentation.html#automating_actions_from_event_sources
   - **Github**
     - [Standalone Server](https://github.com/apache/openwhisk/blob/master/core/standalone/README.md)
     - [Docker compose setup](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/README.md)
     - [Docker compose file](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/docker-compose.yml)
     - [Actions](https://github.com/apache/openwhisk/blob/master/docs/actions.md#listing-actions)
-    - [Cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
+    - [wsk cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
+    
 
 
