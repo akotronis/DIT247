@@ -52,6 +52,23 @@
   - Verify host and connection credentials `>>> wsk list -v` or by
   - `>>> cat ~/.wskprops`
   - Verify `guest` namespace exists by `>>> wsk namespace list`
+### Prerequisites: Configurations: Openwhisk (python runtime/actions with dependencies)
+- Install virtualenv: `>>> python3 -m pip install virtualenv`
+- Add relevant path to PATH: `>>> echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc`
+- Source the file: `>>> source ~/.bashrc`
+- Verify: `>>> virtualenv --version`
+- Actions with dependencies have to be inside `~/openwhisk_actions`. Each subfolder will be the name of the action.  
+  For minio action: Inside `~/openwhisk_actions/minio`
+  - Make sure there are the `requirements.txt`, the `__main__.py`
+  - `>>> virtualenv virtualenv`
+  - `>>> source virtualenv/bin/activate`
+  - `>>> python3 -m pip install -r requirements.txt`
+  - `>>> zip -r minio.zip virtualenv __main__.py`
+  - `>>> wsk action create minio --kind python:3.10 --main main minio.zip` (`3.10, 3.11, 3.12` are available)
+  - Verify created action
+    - `>>> wsk action list` or
+    - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
+  the folder of tha action name to create ( here `~/actions/dependencies/minio`) `>>> virtualenv virtualenv`
 ### Prerequisites: Configurations: Kafka
 Make sure a `dit247` topic exists on kafka. If not create it from the UI
 (This might be created automatically when the nodered consumer node that listens on it is up)
@@ -104,7 +121,7 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - 9991 (Minio UI `http://localhost:9991/browser`)
   - 8080 (Kafka UI `http://localhost:8080/`)
   - 5984 (CouchDB UI `http://localhost:5984/_utils/#login`)
-  - 3233 (Openwisk API `http://localhost:3233`. Not required. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
+  - 3233 (Openwisk API `http://localhost:3233` required for postman. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
   - 3232 (Openwisk playground `http://localhost:3232/playground/ui/index.html`. Not required.)
   - 8025 (Mailhog UI, if used `http://localhost:8025/`)
 - `>>> docker-compose up -d` (or `>>> docker-compose up -d -build` if needed) in `~/dit247`
