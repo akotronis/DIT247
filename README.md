@@ -68,8 +68,8 @@
   - Verify created action
     - `>>> wsk action list` or
     - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
-  - Invoke action `>>> wsk action invoke minio --result --param key1 value1 key2 value2`
-  - (Delete action and verigy deletion: `>>> wsk action delete minio` `>>> wsk action list`)
+  - Invoke action `>>> wsk action invoke minio --result --param key1 value1 --param key2 value2 ...`
+  - (Delete action and verify deletion: `>>> wsk action delete minio` `>>> wsk action list`)
   
 ### Prerequisites: Configurations: Kafka
 Make sure a `dit247` topic exists on kafka. If not create it from the UI
@@ -134,6 +134,7 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
 #### Bucket list
   Run the inject node on Bucket list section to list minio buckets (They should already be there from **Prerequisites: Configurations** stage)
 #### Image upload to minio
+- Make sure the node *Invoke Openwhisk action* has the vm IP on th url which can be found with `>>> ip addr | grep eth0 | head -n 2 | tail -n 1` in the vm
 - Make sure a folder the folder `~/dit247/data/nodered/images` exists in the vm with files with names `file-1.jpg, file-2.jpg, ...`
 - If not, run `>>> python3 -m python.rename_files` from `~/dit247` to rename them  
 - Run the *Trigger file upload* inject node of the *Single image upload* section and check

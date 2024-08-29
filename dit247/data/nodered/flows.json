@@ -773,10 +773,11 @@
             "dit247"
         ],
         "x": 150,
-        "y": 780,
+        "y": 820,
         "wires": [
             [
-                "2ddf01df8c4f67aa"
+                "2ddf01df8c4f67aa",
+                "efab846a6380c699"
             ]
         ]
     },
@@ -794,16 +795,16 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 390,
-        "y": 780,
+        "y": 760,
         "wires": []
     },
     {
         "id": "9db45e750312c223",
         "type": "comment",
         "z": "1b034dd948f70bc1",
-        "name": "Consume Minio bucket event notifications from Kafka broker",
+        "name": "Consume Minio bucket event notifications from Kafka broker and invoke Openwhisk action",
         "info": "",
-        "x": 280,
+        "x": 370,
         "y": 720,
         "wires": []
     },
@@ -995,7 +996,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 160,
-        "y": 980,
+        "y": 1040,
         "wires": [
             [
                 "eca0a0c5eb12b906",
@@ -1017,7 +1018,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 1020,
+        "y": 1080,
         "wires": []
     },
     {
@@ -1027,7 +1028,7 @@
         "name": "Receive Minio webhook request from compressed image upload",
         "info": "",
         "x": 290,
-        "y": 880,
+        "y": 940,
         "wires": []
     },
     {
@@ -1038,7 +1039,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 400,
-        "y": 980,
+        "y": 1040,
         "wires": []
     },
     {
@@ -1048,7 +1049,7 @@
         "name": "Change response code to 400 to test minio's retry configuration",
         "info": "",
         "x": 290,
-        "y": 920,
+        "y": 980,
         "wires": []
     },
     {
@@ -1100,5 +1101,53 @@
                 "4128b11595d08aef"
             ]
         ]
+    },
+    {
+        "id": "efab846a6380c699",
+        "type": "http request",
+        "z": "1b034dd948f70bc1",
+        "name": "Invoke Openwhisk action",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://10.0.2.15:3233/api/v1/namespaces/guest/actions/minio?blocking=true&result=true",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 410,
+        "y": 820,
+        "wires": [
+            [
+                "7cb1dbb225399d25"
+            ]
+        ]
+    },
+    {
+        "id": "7cb1dbb225399d25",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Openwhisk action response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 820,
+        "wires": []
     }
 ]
