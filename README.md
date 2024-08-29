@@ -60,28 +60,6 @@ Inside the minio container: `docker exec -it ctr-minio bash`
 - `>>> netstat -aon | findstr /R /C:"31900" /C:"32076"` to see on which port these process ids are listening to
 - `>>> ForEach ($processId in (netstat -aon | Select-String ":9000" | ForEach-Object { $_.ToString().Split()[-1] })) { taskkill /PID $processId /F }` to kill processes running on port 9000
 
-# Port Forwards
-- 1880 (Nodered UI)
-- 9991 (Minio UI)
-- 8080 (Kafka UI)
-- 5984 (CouchDB UI)
-- 3233 (Openwisk API. Not required. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
-- 3232 (Openwisk playground. Not required.)
-- 8025 (Mailhog UI, if used)
-
-# UIs
-## Couch DB
-- http://localhost:5984/_utils/#login
-
-## Node Red
-- http://localhost:1880/#flow/1b034dd948f70bc1
-
-## MailHog
-- http://localhost:8025/
-
-## Minio
-- http://localhost:9991/browser
-
 ## Openwhisk
 
 - Web UI: http://localhost:3232
@@ -97,8 +75,6 @@ Inside the minio container: `docker exec -it ctr-minio bash`
     - `>>> wsk property get` to verify configuration
 - [wsk cli docs](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
 - [Openwhisk swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/openwhisk/openwhisk/master/core/controller/src/main/resources/apiv1swagger.json#/Actions/invokeActionInPackage)
-
-  ~/vagrant
 
   sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui
 
@@ -124,6 +100,22 @@ Running
 - `>>> vagrant ssh-config` will use the `Vagrantfile folder path/.vagrant/machines/default/virtualbox/private_key` keys.
 
 In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the output of `>>> vagrant ssh-config`
+
+- Run `>>> ps -eF | grep java` to see if the openwhisk launch command is running and if not run it:
+  - `>>> sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui`
+- Check if Openwhisk API is accessible: `>>> curl http:0.0.0.0:3233`
+- Forward ports from VSCode
+  - 1880 (Nodered UI `http://localhost:1880/#flow/1b034dd948f70bc1`)
+  - 9991 (Minio UI `http://localhost:9991/browser`)
+  - 8080 (Kafka UI `http://localhost:8080/`)
+  - 5984 (CouchDB UI `http://localhost:5984/_utils/#login`)
+  - 3233 (Openwisk API `http://localhost:3233`. Not required. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
+  - 3232 (Openwisk playground `http://localhost:3232/playground/ui/index.html`. Not required.)
+  - 8025 (Mailhog UI, if used `http://localhost:8025/`)
+- `>>> docker-compose up -d` (or `>>> docker-compose up -d -build` if needed) in `~/dit247`
+- Check the forwarded ports from browser in the above urls and
+- make sure the containers are Up with `>>> docker ps -a`
+
 
 ## ssh issue
 Generally run
