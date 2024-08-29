@@ -825,7 +825,7 @@
                 "vt": "num"
             }
         ],
-        "repeat": "5",
+        "repeat": "4",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,

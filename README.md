@@ -112,12 +112,23 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
 - make sure the containers are Up with `>>> docker ps -a`
 
 ### Test the flow
-- Bucket list
-  - Run the inject node on Bucket list section to list minio buckets (They should already be there from **Prerequisites: Configurations** stage)
-- Upload image to minio
-  - Make sure a folder the folder `~/dit247/data/nodered/images` exists in the vm with files with names `file-1.jpg, file-2.jpg, ...`
-  - If not, run `>>> python3 -m python.rename_files` from `~/dit247` to rename them
-
+#### Bucket list
+  Run the inject node on Bucket list section to list minio buckets (They should already be there from **Prerequisites: Configurations** stage)
+#### Image upload to minio
+- Make sure a folder the folder `~/dit247/data/nodered/images` exists in the vm with files with names `file-1.jpg, file-2.jpg, ...`
+- If not, run `>>> python3 -m python.rename_files` from `~/dit247` to rename them  
+- Run the *Trigger file upload* inject node of the *Single image upload* section and check
+  - log messages
+  - Minio bucket and kafka UI from browser
+- Retry pattern:
+  - Stop the minio container `>>> docker stop ctr-minio`
+  - Enable the *Repeatedly trigger file upload* inject node and set *Repeat* to every *5 hours or sth* in order to test retry pattern once
+  - Run the *Repeatedly trigger file upload* inject node and check logs to see retries
+  - Start the minio container `>>> docker start ctr-minio`
+  - Reset *Repeat* to every *3 seconds* Enable the *Repeatedly trigger file upload* inject node
+  - Run the *Repeatedly trigger file upload* inject node and check
+    - log messages
+    - Minio bucket and kafka UI from browser
 
 # General guides
 ### vagrant ssh issue
@@ -157,6 +168,10 @@ Running
 In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the output of `>>> vagrant ssh-config`
 
 # Docs
+- **Vagrant**
+  - [Default User Settings](https://developer.hashicorp.com/vagrant/docs/boxes/base#default-user-settings)
+  - [SSH Settings](https://developer.hashicorp.com/vagrant/docs/vagrantfile/ssh_settings#available-settings)
+  - [Synced Folders](https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage)
 - **ssh/config files**
   - https://linux.die.net/man/5/ssh_config
   - https://www.ssh.com/academy/ssh/config
@@ -168,14 +183,15 @@ In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the o
   - https://docs.couchdb.org/en/stable/config/auth.html#config-admins
 
 - **Openwhisk**
-  - [Openwhisk swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/openwhisk/openwhisk/master/core/controller/src/main/resources/apiv1swagger.json#/Actions/invokeActionInPackage)
-  - **Apache**: https://openwhisk.apache.org/documentation.html#automating_actions_from_event_sources
-  - **Github**
-    - [Standalone Server](https://github.com/apache/openwhisk/blob/master/core/standalone/README.md)
-    - [Docker compose setup](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/README.md)
-    - [Docker compose file](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/docker-compose.yml)
-    - [Actions](https://github.com/apache/openwhisk/blob/master/docs/actions.md#listing-actions)
-    - [wsk cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli)
-    
+  - [Swagger](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/openwhisk/openwhisk/master/core/controller/src/main/resources/apiv1swagger.json#/Actions/invokeActionInPackage)
+  - [Standalone Server](https://github.com/apache/openwhisk/blob/master/core/standalone/README.md) (Github)
+  - [Docker compose setup](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/README.md) (Github)
+  - [Docker compose file](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/docker-compose.yml) (Github)
+  - [Actions](https://github.com/apache/openwhisk/blob/master/docs/actions.md#listing-actions) (Github)
+  - [wsk cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli) (Github)
+  - [Automating Actions from Event Sources](https://openwhisk.apache.org/documentation.html#automating_actions_from_event_sources) (Apache)
+  - [Apache OpenWhisk package for communication with Kafka or IBM Message Hub](https://github.com/apache/openwhisk-package-kafka/blob/master/README.md) (Github)
+  - [Apache OpenWhisk Runtimes for Python](https://github.com/apache/openwhisk-runtime-python/blob/master/README.md#using-additional-python-libraries) (Github)
+  - [Python Packages in OpenWhisk](https://jamesthom.as/2017/04/python-packages-in-openwhisk/) (James Thomas)
 
 
