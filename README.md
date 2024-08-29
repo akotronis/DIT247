@@ -192,6 +192,7 @@ In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the o
   - [Automating Actions from Event Sources](https://openwhisk.apache.org/documentation.html#automating_actions_from_event_sources) (Apache)
   - [Apache OpenWhisk package for communication with Kafka or IBM Message Hub](https://github.com/apache/openwhisk-package-kafka/blob/master/README.md) (Github)
   - [Apache OpenWhisk Runtimes for Python](https://github.com/apache/openwhisk-runtime-python/blob/master/README.md#using-additional-python-libraries) (Github)
-  - [Python Packages in OpenWhisk](https://jamesthom.as/2017/04/python-packages-in-openwhisk/) (James Thomas)
+  - [Creating and invoking Python actions](https://github.com/apache/openwhisk/blob/master/docs/actions-python.md) (Github) 
+  - [Python Packages in OpenWhisk](https://jamesthom.as/2017/04/python-packages-in-openwhisk/) (James Thomas) 
 
 
