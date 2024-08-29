@@ -64,11 +64,13 @@
   - `>>> source virtualenv/bin/activate`
   - `>>> python3 -m pip install -r requirements.txt`
   - `>>> zip -r minio.zip virtualenv __main__.py`
-  - `>>> wsk action create minio --kind python:3.10 --main main minio.zip` (`3.10, 3.11, 3.12` are available)
+  - Create action: `>>> wsk action create minio --kind python:3.10 --main main minio.zip` (`3.10, 3.11, 3.12` are available)
   - Verify created action
     - `>>> wsk action list` or
     - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
-  the folder of tha action name to create ( here `~/actions/dependencies/minio`) `>>> virtualenv virtualenv`
+  - Invoke action `>>> wsk action invoke minio --result --param key1 value1 key2 value2`
+  - (Delete action and verigy deletion: `>>> wsk action delete minio` `>>> wsk action list`)
+  
 ### Prerequisites: Configurations: Kafka
 Make sure a `dit247` topic exists on kafka. If not create it from the UI
 (This might be created automatically when the nodered consumer node that listens on it is up)
