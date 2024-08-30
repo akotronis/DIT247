@@ -68,7 +68,7 @@
   - Verify created action
     - `>>> wsk action list` or
     - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
-  - Invoke action `>>> wsk action invoke minio --result --param key1 value1 --param key2 value2 ...`
+  - Invoke action `>>> wsk action invoke minio --result --blocking --param key1 value1 --param key2 value2 ...`
   - (Delete action and verify deletion: `>>> wsk action delete minio` `>>> wsk action list`)
   
 ### Prerequisites: Configurations: Kafka

@@ -89,3 +89,10 @@ Create a __main__.py inside ~/action with the action code
 
 
 
+In ~/dit247/actions/dependencies/minio:
+>>> docker build -f Dockerfile.python -t img-python-action .
+>>> cp . -R ~/openwhisk_actions/minio && rm ~/openwhisk_actions/minio/Dockerfile.python
+
+In ~/openwhisk_actions/minio:
+>>> docker run --rm -v "$PWD:/app" img-python-action bash -c "virtualenv virtualenv && source virtualenv/bin/activate && pip install -r requirements.txt"
+>>> zip -r minio.zip virtualenv __main__.py
