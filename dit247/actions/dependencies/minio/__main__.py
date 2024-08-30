@@ -1,60 +1,81 @@
-
-
 def main(params):
-    _params = {
-      "EventName": "s3:ObjectCreated:Put",
-      "Key": "dit247/file-265.jpg",
-      "Records": [
-        {
-          "eventVersion": "2.0",
-          "eventSource": "minio:s3",
-          "awsRegion": "",
-          "eventTime": "2024-08-29T14:55:11.400Z",
-          "eventName": "s3:ObjectCreated:Put",
-          "userIdentity": {
-            "principalId": "admin"
-          },
-          "requestParameters": {
-            "principalId": "admin",
-            "region": "",
-            "sourceIPAddress": "172.18.0.4"
-          },
-          "responseElements": {
-            "x-amz-id-2": "dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8",
-            "x-amz-request-id": "17F03ACD6F38F575",
-            "x-minio-deployment-id": "330c02db-3fe3-4464-ae22-27f7e8da89b1",
-            "x-minio-origin-endpoint": "http://172.18.0.5:9000"
-          },
-          "s3": {
-            "s3SchemaVersion": "1.0",
-            "configurationId": "Config",
-            "bucket": {
-              "name": "dit247",
-              "ownerIdentity": {
-                "principalId": "admin"
-              },
-              "arn": "arn:aws:s3:::dit247"
-            },
-            "object": {
-              "key": "file-265.jpg",
-              "size": 11,
-              "eTag": "e4f750659742b67df44c2c633522acbe",
-              "contentType": "binary/octet-stream",
-              "userMetadata": {
-                "content-type": "binary/octet-stream"
-              },
-              "sequencer": "17F03ACD72204E9D"
-            },
-            "source": {
-              "host": "172.18.0.4",
-              "port": "",
-              "userAgent": "MinIO (linux; x64) minio-js/8.0.1"
-            }
-          }
-        }
-      ]
-    }
-    params = {'firstname':'Anastasios', 'lastname': 'Kotronis'}
-    firstname, lastname = map(lambda x:params.get(x, 'stranger'), ['firstname', 'lastname'])
-    greeting = f'Hello {firstname} - {lastname}'
-    return {"greeting": greeting}
+	########## PARAMS ##########
+	params = {
+		"EventName": "s3:ObjectCreated:Put",
+		"Key": "dit247/file-121.jpg",
+		"Records": [
+			{
+					# Record details
+			}
+		]
+	}
+    #############################
+	
+
+
+	########## IMPORTS ##########
+	from io import BytesIO
+	import os
+	from minio import Minio
+	from PIL import Image
+
+	########## MinIO configuration ##########
+	MINIO_URL = '127.0.0.1:9990'
+	ACCESS_KEY = 'admin'
+	SECRET_KEY = 'password'
+	SOURCE_BUCKET = 'dit247'
+	DEST_BUCKET = 'dit247c'
+	# Initialize MinIO client
+	client = Minio(MINIO_URL, access_key=ACCESS_KEY, secret_key=SECRET_KEY, secure=False)
+
+	########## RESIZE IMAGE ##########
+	def resize_image(image_data):
+		with Image.open(BytesIO(image_data)) as img:
+			img = img.resize((100, 100))  # Resize the image to 100x100 pixels
+			output = BytesIO()
+			img.save(output, format='JPEG')
+			return output.getvalue()
+
+	########## PROCESS EVENT ##########
+	try:
+		_, input_file = os.path.split(params['Key'])
+		input_file_no_ext, input_file_ext = os.path.splitext(input_file)
+		output_file = f'{input_file_no_ext}-c{input_file_ext}'
+		# Download the object from the source bucket
+		response = client.get_object(SOURCE_BUCKET, input_file)
+		image_data = response.read()
+
+		# Resize the image
+		resized_image_data = resize_image(image_data)
+
+		# Make the bucket if it doesn't exist.
+		found = client.bucket_exists(DEST_BUCKET)
+		if not found:
+			client.make_bucket(DEST_BUCKET)
+
+		# Upload the resized image to the destination bucket
+		client.put_object(
+			DEST_BUCKET,
+			output_file,
+			data=BytesIO(resized_image_data),
+			length=len(resized_image_data),
+			content_type='image/jpeg'
+		)
+		response = f'Successfully resized and uploaded {output_file} to {DEST_BUCKET}'
+	except Exception as e:
+		response = f'Error occurred: {e}'
+	return {'response': response}
+
+
+# if __name__ == "__main__":
+# 	from pdb import set_trace as bp; bp()
+# 	params = {
+# 		"EventName": "s3:ObjectCreated:Put",
+# 		"Key": "dit247/file-121.jpg",
+# 		"Records": [
+# 			{
+# 					# Record details
+# 			}
+# 		]
+# 	}
+# 	main(params)
