@@ -1,22 +1,20 @@
 def main(params):
-    ##################################    
-    # params = {"Key": "dit247/file-121.jpg"}
-    ##################################        
-    VMIP, BUCKET_FILE = params['vmip'], params['Key']
-    MINIO_URL = f'{VMIP}:9990'
-    ACCESS_KEY = 'admin'
-    SECRET_KEY = 'password'
-    SOURCE_BUCKET = 'dit247'
-    DEST_BUCKET = 'dit247c'
-
-    # return {'result': params}
-
     try:
-        # Imports
         from io import BytesIO
         import os
         from minio import Minio
         from PIL import Image
+
+        VMIP, BUCKET_FILE = params['vmip'], params['Key']
+        MINIO_URL = f'{VMIP}:9990'
+        ACCESS_KEY = 'admin'
+        SECRET_KEY = 'password'
+        SOURCE_BUCKET = 'dit247'
+        DEST_BUCKET = 'dit247c'
+            
+        _, input_file = os.path.split(BUCKET_FILE)
+        input_file_no_ext, input_file_ext = os.path.splitext(input_file)
+        output_file = f'{input_file_no_ext}-c{input_file_ext}'
         
         # Resize Image func
         def resize_image(image_data):
@@ -28,9 +26,6 @@ def main(params):
 
         # Initialize MinIO client
         client = Minio(MINIO_URL, access_key=ACCESS_KEY, secret_key=SECRET_KEY, secure=False)
-        _, input_file = os.path.split(BUCKET_FILE)
-        input_file_no_ext, input_file_ext = os.path.splitext(input_file)
-        output_file = f'{input_file_no_ext}-c{input_file_ext}'
 
         # Download the object from the source bucket
         response = client.get_object(SOURCE_BUCKET, input_file)
@@ -52,7 +47,11 @@ def main(params):
             length=len(resized_image_data),
             content_type='image/jpeg'
         )
-        result = f'Successfully resized and uploaded {output_file} to {DEST_BUCKET}'
+        msg = f'Successfully resized and uploaded {output_file} to {DEST_BUCKET}'
     except Exception as e:
-        result = f'Error occurred: {e}'
-    return {'result': result}
+        msg = f'Error occurred: {e}'
+    return {
+        'input-file': input_file,
+        'output-file': output_file,
+        'message': msg
+    }

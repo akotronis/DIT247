@@ -470,7 +470,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 730,
-        "y": 400,
+        "y": 380,
         "wires": []
     },
     {
@@ -490,7 +490,7 @@
         "wires": [
             [
                 "ca6ee7fdfa42d2df",
-                "9e303cf32bd22a04"
+                "84ab97a3fbc08a22"
             ]
         ]
     },
@@ -600,7 +600,7 @@
         "objects_prefix": "",
         "objects_etag": "",
         "objects_datetime": "",
-        "x": 920,
+        "x": 860,
         "y": 440,
         "wires": [
             [
@@ -624,7 +624,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1120,
+        "x": 1060,
         "y": 420,
         "wires": []
     },
@@ -741,7 +741,7 @@
         "name": "Upload singe image to Minio",
         "info": "",
         "x": 180,
-        "y": 360,
+        "y": 380,
         "wires": []
     },
     {
@@ -757,7 +757,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1110,
+        "x": 1050,
         "y": 460,
         "wires": []
     },
@@ -780,7 +780,7 @@
             "dit247"
         ],
         "x": 150,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "2ddf01df8c4f67aa",
@@ -792,18 +792,17 @@
         "id": "2ddf01df8c4f67aa",
         "type": "debug",
         "z": "1b034dd948f70bc1",
-        "d": true,
         "name": "Consumer output",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.Key",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 470,
-        "y": 780,
+        "y": 860,
         "wires": []
     },
     {
@@ -813,7 +812,7 @@
         "name": "Consume Minio bucket event notifications from Kafka broker and invoke Openwhisk action",
         "info": "",
         "x": 370,
-        "y": 720,
+        "y": 800,
         "wires": []
     },
     {
@@ -840,7 +839,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 210,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "f29d16a230645358"
@@ -860,10 +859,10 @@
         "encoding": "none",
         "allProps": false,
         "x": 670,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
-                "c7c95dd1e7ec9b91"
+                "bcf744a1d8efeaa3"
             ]
         ]
     },
@@ -874,7 +873,7 @@
         "name": "Upload successive images to Minio with Retry",
         "info": "",
         "x": 230,
-        "y": 520,
+        "y": 560,
         "wires": []
     },
     {
@@ -882,8 +881,8 @@
         "type": "subflow:e976c9069888c66c",
         "z": "1b034dd948f70bc1",
         "name": "",
-        "x": 910,
-        "y": 620,
+        "x": 990,
+        "y": 660,
         "wires": [
             []
         ]
@@ -1004,11 +1003,12 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 160,
-        "y": 1040,
+        "y": 1120,
         "wires": [
             [
                 "eca0a0c5eb12b906",
-                "fc361a7ac8c6cd81"
+                "fc361a7ac8c6cd81",
+                "894ebdc239c39b5f"
             ]
         ]
     },
@@ -1026,7 +1026,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 1080,
+        "y": 1200,
         "wires": []
     },
     {
@@ -1036,7 +1036,7 @@
         "name": "Receive Minio webhook request from compressed image upload",
         "info": "",
         "x": 290,
-        "y": 940,
+        "y": 1020,
         "wires": []
     },
     {
@@ -1047,7 +1047,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 400,
-        "y": 1040,
+        "y": 1120,
         "wires": []
     },
     {
@@ -1057,7 +1057,7 @@
         "name": "Change response code to 400 to test minio's retry configuration",
         "info": "",
         "x": 290,
-        "y": 980,
+        "y": 1060,
         "wires": []
     },
     {
@@ -1067,7 +1067,7 @@
         "name": "Stop Minio service|Change repeat option to test retry pattern",
         "info": "",
         "x": 280,
-        "y": 560,
+        "y": 600,
         "wires": []
     },
     {
@@ -1103,7 +1103,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "4128b11595d08aef"
@@ -1134,7 +1134,7 @@
             }
         ],
         "x": 750,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "7cb1dbb225399d25"
@@ -1155,35 +1155,8 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1020,
-        "y": 840,
+        "y": 920,
         "wires": []
-    },
-    {
-        "id": "9e303cf32bd22a04",
-        "type": "change",
-        "z": "1b034dd948f70bc1",
-        "name": "Set msg.stream",
-        "rules": [
-            {
-                "t": "set",
-                "p": "stream",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 740,
-        "y": 440,
-        "wires": [
-            [
-                "0c367a5447a8e962"
-            ]
-        ]
     },
     {
         "id": "fa0f7050ba4311ac",
@@ -1198,7 +1171,7 @@
         "finalize": "",
         "libs": [],
         "x": 490,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "efab846a6380c699",
@@ -1220,7 +1193,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 740,
-        "y": 780,
+        "y": 860,
         "wires": []
     },
     {
@@ -1243,10 +1216,87 @@
         "to": "",
         "reg": false,
         "x": 300,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "fa0f7050ba4311ac"
+            ]
+        ]
+    },
+    {
+        "id": "894ebdc239c39b5f",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "File flow end/Duration",
+        "func": "// Set the result to msg.extracted or any other property you want\nlet file = msg.payload.Key.replace('dit247c/', '').replace('-c', '');\n\n// Get file starttime from flow if there\nlet startTime = flow.get(file);\n\nif (startTime) {\n    let endTime = Date.now();\n    \n    // Calculate the time interval in milliseconds\n    let duration = endTime - startTime;\n\n    // Store the duration in the message payload to send it via POST request\n    msg.payload = {\n        file: file,\n        duration: duration\n    };\n\n    // Clear the stored start time for this key\n    flow.set(file, null);\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 1160,
+        "wires": [
+            [
+                "8bfba44c360ce2d0"
+            ]
+        ]
+    },
+    {
+        "id": "84ab97a3fbc08a22",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "File flow start/Set msg.steam",
+        "func": "// Set stream for Minio node\nmsg.stream = msg.payload;\n\n// Catch file flow start time\nlet file = msg.objectName;\nlet startTime = Date.now();\n\n// Store the start time in a flow variable, indexed by the file key\nflow.set(file, startTime);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 500,
+        "wires": [
+            [
+                "0c367a5447a8e962"
+            ]
+        ]
+    },
+    {
+        "id": "8bfba44c360ce2d0",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "File flow duration",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "bcf744a1d8efeaa3",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "File flow start/Set msg.steam",
+        "func": "// Set stream for Minio node\nmsg.stream = msg.payload;\n\n// Catch file flow start time\nlet file = msg.objectName;\nlet startTime = Date.now();\n\n// Store the start time in a flow variable, indexed by the file key\nflow.set(file, startTime);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 720,
+        "wires": [
+            [
+                "c7c95dd1e7ec9b91"
             ]
         ]
     }
