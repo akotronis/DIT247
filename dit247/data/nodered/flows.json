@@ -820,6 +820,7 @@
         "id": "b4e10aac68da31d1",
         "type": "inject",
         "z": "1b034dd948f70bc1",
+        "d": true,
         "name": "Repeatedly trigger file upload",
         "props": [
             {
