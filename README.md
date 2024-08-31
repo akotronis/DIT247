@@ -172,6 +172,13 @@ If private key has to be added to `~/.ssh` (for example to work with git/github 
 - Must do `chmod 600 ~/.ssh/id_ed25519`, `chmod 600 ~/.ssh/id_rsa`
 
 # Troubleshooting
+## VSCode (LIFE SAVER)
+If ssh is possible from terminal but not with VSCode, then from VScode:
+- `>> Ctrl Shit P`
+- Remote-SSH: Kill VS Code Server on Host...
+- Select host defined on config that has the problem
+- Try again
+
 ## VM
 If with
 - `>>> vagrant up` and/or
