@@ -53,23 +53,22 @@
   - `>>> cat ~/.wskprops`
   - Verify `guest` namespace exists by `>>> wsk namespace list`
 ### Prerequisites: Configurations: Openwhisk (python runtime/actions with dependencies)
-- Install virtualenv: `>>> python3 -m pip install virtualenv`
-- Add relevant path to PATH: `>>> echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc`
-- Source the file: `>>> source ~/.bashrc`
-- Verify: `>>> virtualenv --version`
-- Actions with dependencies have to be inside `~/openwhisk_actions`. Each subfolder will be the name of the action.  
-  For minio action: Inside `~/openwhisk_actions/minio`
-  - Make sure there are the `requirements.txt`, the `__main__.py`
-  - `>>> virtualenv virtualenv`
-  - `>>> source virtualenv/bin/activate`
-  - `>>> python3 -m pip install -r requirements.txt`
-  - `>>> zip -r minio.zip virtualenv __main__.py`
-  - Create action: `>>> wsk action create minio --kind python:3.10 --main main minio.zip` (`3.10, 3.11, 3.12` are available)
-  - Verify created action
-    - `>>> wsk action list` or
-    - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
-  - Invoke action `>>> wsk action invoke minio --result --blocking --param key1 value1 --param key2 value2 ...`
-  - (Delete action and verify deletion: `>>> wsk action delete minio` `>>> wsk action list`)
+Actions with dependencies will be inside `~/openwhisk_actions`. Each subfolder will be the name of the action.  
+Work in `~/dit247/actions/dependencies/minio` which is shared and copy to `~/openwhisk_actions` afterwards (need to be separate due to VirtualBox sharing imposed permissions)  
+For a **minio** named action with python runtime:
+- In `~/dit247/actions/dependencies/minio` run `>>> docker build -f Dockerfile.python -t img-python-action .` to build **python3.10** image for action creation
+- Create `~/openwhisk_actions/minio` if it doesn't exist
+- Make sure it is clean: `>>> sudo rm -R ./*`
+- Copy required content from working folder: `>>> cp ~/dit247/actions/dependencies/minio/* -R .`
+- Use built image to create **python3.10** virtual environment for action creation compatible with **python 3.10** runtime:  
+`>>> docker run --rm -v "$PWD:/app" img-python-action bash -c "virtualenv virtualenv && source virtualenv/bin/activate && pip install -r requirements.txt"`
+- Zip content: `>>> zip -r minio.zip virtualenv __main__.py`
+- Create action: `>>> wsk action create minio --kind python:3.10 --main main minio.zip` (`3.10, 3.11, 3.12` are available)
+- Verify created action
+  - `>>> wsk action list` or
+  - `>>> curl -u 23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP http://localhost:3233/api/v1/namespaces/guest/actions` (This can send from postman as well)
+- Invoke action `>>> wsk action invoke minio --result --blocking --param key1 value1 --param key2 value2 ...`
+- (Delete action and verify deletion: `>>> wsk action delete minio && wsk action list`)
   
 ### Prerequisites: Configurations: Kafka
 Make sure a `dit247` topic exists on kafka. If not create it from the UI

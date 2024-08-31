@@ -1,40 +1,34 @@
 def main(params):
-    ########## RESIZE IMAGE ##########
-    def resize_image(image_data):
-        with Image.open(BytesIO(image_data)) as img:
-            img = img.resize((100, 100))
-            output = BytesIO()
-            img.save(output, format='JPEG')
-            return output.getvalue()
     ##################################    
-    params = {
-        "EventName": "s3:ObjectCreated:Put",
-        "Key": "dit247/file-121.jpg",
-        "Records": [
-            {
-                    # Record details
-            }
-        ]
-    }
-    ##################################
+    # params = {"Key": "dit247/file-121.jpg"}
+    ##################################        
+    VMIP, BUCKET_FILE = params['vmip'], params['Key']
+    MINIO_URL = f'{VMIP}:9990'
+    ACCESS_KEY = 'admin'
+    SECRET_KEY = 'password'
+    SOURCE_BUCKET = 'dit247'
+    DEST_BUCKET = 'dit247c'
+
+    # return {'result': params}
+
     try:
-        ########## IMPORTS ##########
+        # Imports
         from io import BytesIO
         import os
         from minio import Minio
         from PIL import Image
-
-        ########## MinIO configuration ##########
-        # MINIO_URL = '127.0.0.1:9990'
-        MINIO_URL = '10.0.2.15:9990'
-        ACCESS_KEY = 'admin'
-        SECRET_KEY = 'password'
-        SOURCE_BUCKET = 'dit247'
-        DEST_BUCKET = 'dit247c'
+        
+        # Resize Image func
+        def resize_image(image_data):
+            with Image.open(BytesIO(image_data)) as img:
+                img = img.resize((100, 100))
+                output = BytesIO()
+                img.save(output, format='JPEG')
+                return output.getvalue()
 
         # Initialize MinIO client
         client = Minio(MINIO_URL, access_key=ACCESS_KEY, secret_key=SECRET_KEY, secure=False)
-        _, input_file = os.path.split(params['Key'])
+        _, input_file = os.path.split(BUCKET_FILE)
         input_file_no_ext, input_file_ext = os.path.splitext(input_file)
         output_file = f'{input_file_no_ext}-c{input_file_ext}'
 
@@ -58,21 +52,7 @@ def main(params):
             length=len(resized_image_data),
             content_type='image/jpeg'
         )
-        response = f'Successfully resized and uploaded {output_file} to {DEST_BUCKET}'
+        result = f'Successfully resized and uploaded {output_file} to {DEST_BUCKET}'
     except Exception as e:
-        response = f'Error occurred: {e}'
-    return {'response': response}
-
-
-# if __name__ == "__main__":
-# 	from pdb import set_trace as bp; bp()
-# 	params = {
-# 		"EventName": "s3:ObjectCreated:Put",
-# 		"Key": "dit247/file-121.jpg",
-# 		"Records": [
-# 			{
-# 					# Record details
-# 			}
-# 		]
-# 	}
-# 	main(params)
+        result = f'Error occurred: {e}'
+    return {'result': result}

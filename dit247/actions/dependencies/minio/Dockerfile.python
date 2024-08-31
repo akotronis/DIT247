@@ -17,14 +17,8 @@ RUN apt-get update && apt-get install -y \
     libxcb1-dev \
     && apt-get clean
 
-# Copy the requirements.txt file to the container
-COPY requirements.txt .
-
 # Upgrade pip
 RUN pip install --upgrade pip
-
-# Copy the rest of your project files into the container
-COPY . .
 
 RUN pip install virtualenv
 RUN echo 'export PATH="$HOME.local/bin:$PATH"' >> ~/.bashrc

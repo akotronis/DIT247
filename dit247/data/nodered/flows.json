@@ -780,11 +780,11 @@
             "dit247"
         ],
         "x": 150,
-        "y": 820,
+        "y": 840,
         "wires": [
             [
                 "2ddf01df8c4f67aa",
-                "efab846a6380c699"
+                "793abf42209f04f1"
             ]
         ]
     },
@@ -792,6 +792,7 @@
         "id": "2ddf01df8c4f67aa",
         "type": "debug",
         "z": "1b034dd948f70bc1",
+        "d": true,
         "name": "Consumer output",
         "active": true,
         "tosidebar": true,
@@ -801,8 +802,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 390,
-        "y": 760,
+        "x": 470,
+        "y": 780,
         "wires": []
     },
     {
@@ -819,7 +820,6 @@
         "id": "b4e10aac68da31d1",
         "type": "inject",
         "z": "1b034dd948f70bc1",
-        "d": true,
         "name": "Repeatedly trigger file upload",
         "props": [
             {
@@ -1117,7 +1117,7 @@
         "method": "POST",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "http://10.0.2.15:3233/api/v1/namespaces/guest/actions/minio?blocking=true&result=true",
+        "url": "",
         "tls": "",
         "persist": false,
         "proxy": "",
@@ -1132,8 +1132,8 @@
                 "valueValue": ""
             }
         ],
-        "x": 410,
-        "y": 820,
+        "x": 750,
+        "y": 840,
         "wires": [
             [
                 "7cb1dbb225399d25"
@@ -1153,8 +1153,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 820,
+        "x": 1020,
+        "y": 840,
         "wires": []
     },
     {
@@ -1181,6 +1181,71 @@
         "wires": [
             [
                 "0c367a5447a8e962"
+            ]
+        ]
+    },
+    {
+        "id": "fa0f7050ba4311ac",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "Set action invokation input",
+        "func": "// Get the flow variable\nlet vmip = flow.get(\"vmip\");\n\n// Construct the URL with the flow variable\nmsg.url = `http://${vmip}:3233/api/v1/namespaces/guest/actions/minio?blocking=true&result=true`;\n\n// Parse msg.payload from a string to an object (if it's a JSON string)\nlet payloadObj = {};\ntry {\n    payloadObj = JSON.parse(msg.payload);\n} catch (e) {\n    // Handle error if the payload is not a valid JSON string\n    node.warn(\"Payload is not a valid JSON string, proceeding with empty object.\");\n}\n\n// Add the vmip key-value pair to the msg.payload object\npayloadObj.vmip = vmip;\n\n// Update msg.payload with the modified object\nmsg.payload = payloadObj;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 840,
+        "wires": [
+            [
+                "efab846a6380c699",
+                "9edaebefc8bfd8ab"
+            ]
+        ]
+    },
+    {
+        "id": "9edaebefc8bfd8ab",
+        "type": "debug",
+        "z": "1b034dd948f70bc1",
+        "name": "Action invocation input",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "793abf42209f04f1",
+        "type": "change",
+        "z": "1b034dd948f70bc1",
+        "name": "Set vmip",
+        "rules": [
+            {
+                "t": "set",
+                "p": "vmip",
+                "pt": "flow",
+                "to": "10.0.2.15",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 300,
+        "y": 840,
+        "wires": [
+            [
+                "fa0f7050ba4311ac"
             ]
         ]
     }
