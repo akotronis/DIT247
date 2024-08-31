@@ -74,6 +74,122 @@
         "useCredentials": false
     },
     {
+        "id": "98de922eba11239a",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "0b3c56854c1ff5be",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "c7de0889fd3e3749",
+        "type": "ui_group",
+        "name": "File resizing flow",
+        "tab": "98de922eba11239a",
+        "order": 1,
+        "disp": false,
+        "width": "27",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "b4eca1de14599dd1",
         "type": "delay",
         "z": "e976c9069888c66c",
@@ -797,7 +913,7 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload.Key",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
@@ -1239,7 +1355,8 @@
         "y": 1160,
         "wires": [
             [
-                "8bfba44c360ce2d0"
+                "8bfba44c360ce2d0",
+                "81ce0b9b748027af"
             ]
         ]
     },
@@ -1277,7 +1394,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 690,
-        "y": 1160,
+        "y": 1200,
         "wires": []
     },
     {
@@ -1297,6 +1414,70 @@
         "wires": [
             [
                 "c7c95dd1e7ec9b91"
+            ]
+        ]
+    },
+    {
+        "id": "57be86aef74c7077",
+        "type": "ui_chart",
+        "z": "1b034dd948f70bc1",
+        "name": "File flow durations dashboard",
+        "group": "c7de0889fd3e3749",
+        "order": 0,
+        "width": "0",
+        "height": "0",
+        "label": "File resizing flow: Duration in milliseconds per incidence",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "100",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": ".wide-chart {     width: 100% !important;  /* Make the chart full width */     max-width: 100% !important;     height: 400px !important; /* Adjust the height as needed */ }",
+        "x": 980,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81ce0b9b748027af",
+        "type": "function",
+        "z": "1b034dd948f70bc1",
+        "name": "Format Chart Input",
+        "func": "// msg.payload = {\n//     x: msg.payload.file,        // x-axis will be the file name\n//     y: msg.payload.duration     // y-axis will be the duration\n// };\n\n// msg.topic = \"File Flow Durations\";   // Optional: set a topic for the chart series\nmsg.payload = msg.payload.duration\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 1160,
+        "wires": [
+            [
+                "57be86aef74c7077"
             ]
         ]
     }
