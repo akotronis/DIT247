@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "17b19123-aeb7-4e77-83ce-f3e18ece500b",
+		"name": "DIT247",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14603057"
+	},
+	"item": [
+		{
+			"name": "Openwhisk",
+			"item": [
+				{
+					"name": "Actions",
+					"item": [
+						{
+							"name": "Actions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}:{{PORT}}/api/v1/namespaces/{{NAMESPACE}}/actions",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"api",
+										"v1",
+										"namespaces",
+										"{{NAMESPACE}}",
+										"actions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Action",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{LOCAL}}:{{PORT}}/api/v1/namespaces/{{NAMESPACE}}/actions/{{ACTIONNAME}}",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"api",
+										"v1",
+										"namespaces",
+										"{{NAMESPACE}}",
+										"actions",
+										"{{ACTIONNAME}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Action Invokation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Akotronis\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}:{{PORT}}/api/v1/namespaces/{{NAMESPACE}}/actions/{{ACTIONNAME}}?blocking=true",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"api",
+										"v1",
+										"namespaces",
+										"{{NAMESPACE}}",
+										"actions",
+										"{{ACTIONNAME}}"
+									],
+									"query": [
+										{
+											"key": "result",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "blocking",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Triggers",
+					"item": [
+						{
+							"name": "Trigger Fire",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Akotronis\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL}}:{{PORT}}/api/v1/namespaces/{{NAMESPACE}}/triggers/helloTrigger",
+									"host": [
+										"{{LOCAL}}"
+									],
+									"port": "{{PORT}}",
+									"path": [
+										"api",
+										"v1",
+										"namespaces",
+										"{{NAMESPACE}}",
+										"triggers",
+										"helloTrigger"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Namespaces",
+					"request": {
+						"method": "OPTIONS",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}:{{PORT}}/namespaces",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"namespaces"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "{{PASSWORD}}",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "{{USER}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Nodered",
+			"item": [
+				{
+					"name": "Minio Webhook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Akotronis\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}:{{PORT}}/compressed-images",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"port": "{{PORT}}",
+							"path": [
+								"compressed-images"
+							],
+							"query": [
+								{
+									"key": "result",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Base Url",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Akotronis\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}:{{PORT}}",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"port": "{{PORT}}",
+							"query": [
+								{
+									"key": "result",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

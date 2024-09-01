@@ -118,7 +118,7 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - `>>> sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui`
 - Check if Openwhisk API is accessible: `>>> curl http:0.0.0.0:3233`
 - Forward ports from VSCode
-  - 1880 (Nodered UI `http://localhost:1880/#flow/1b034dd948f70bc1`)
+  - 1880 (Nodered UI `http://localhost:1880` and dashboard `http://localhost:1880/ui`)
   - 9991 (Minio UI `http://localhost:9991/browser`)
   - 8080 (Kafka UI `http://localhost:8080/`)
   - 5984 (CouchDB UI `http://localhost:5984/_utils/#login`)
