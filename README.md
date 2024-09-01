@@ -46,13 +46,14 @@ Those buckets can be created either from the minio UI or from a flow in nodered.
 - **Step 6**: sends it back to minio on **dit247c** bucket
 <p align="left"><img src="./static-files/Pictures/WebhookDashboard.png" alt="Flow" width="800"/></p>
 
-- **Step 7**: In minio **dit247c** bucket a **webhook** has been setup whichs sends an image upload request notification to a nodered **http node** which displays the corresponding output.
+- **Step 7**: In minio **dit247c** bucket a **webhook** has been setup whichs sends an image upload request notification to a **http in nodered node** which displays the corresponding output.
 
 - **Repeated flow for multiple files**: The flow can be triggered repeatedly using the flow below:
 <p align="left"><img src="./static-files/Pictures/RepeatedeImageUpload.png" alt="Flow" width="800"/></p>
 
 From here we can test the **retry pattern** by stopping the minio container, for example, to simulate failure.
-- **Monitoring**: The flow duration for each file is monitored by catching corresponding *start* and *end* flow time and the duration is displayed in a graph on `localhost:1880/ui` using a **chart nodered node**.
+- **Monitoring**: The flow duration for each file is monitored by catching corresponding *start* and *end* flow time and the duration is displayed in a graph on `localhost:1880/ui` using a **chart nodered node** and persisted to a file `metrics.txt` with a **write file nodered node**.  
+If the file resize flow duration for a specific file exceeds **10 seconds**, then an email alert is sent with an **email nodered node**
 <p align="left"><img src="./static-files/Pictures/Graph.png" alt="Flow" width="800"/></p>
 
 # Design Patterns
@@ -73,6 +74,7 @@ The other project components/services are setup using docker and docker compose,
 - **Kafka and UI**
 - **Node red** (Non-built-in nodes are installed on dedicated dockerfile)
 - **Minio** (cli client is installed on dedicated dockerfile)
+- **Mailhog**
 
 Ports from the containers/vm are forwarded through the VSCode port forwarding tool
 
@@ -85,6 +87,7 @@ Installed nodes:
 - [node-red-contrib-minio-all](https://flows.nodered.org/node/node-red-contrib-minio-all) for the communication with Minio
 - [node-red-contrib-kafka-manager](https://flows.nodered.org/node/node-red-contrib-kafka-manager) for communicating with kafka
 - [node-red-dashboard](https://flows.nodered.org/node/node-red-dashboard) for displaying the file resizing flow duration on dashboard
+- [node-red-node-email](https://flows.nodered.org/node/node-red-node-email) for sending email alerts
 
 The retry pattern is implemented as a subflow and used for the iamge upload to minio
 <p align="left"><img src="./static-files/Pictures/RetryPatternSubflow.png" alt="Flow" width="800"/></p>

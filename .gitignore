@@ -5,6 +5,7 @@
 
 **/data/nodered/**
 !**/data/nodered/**/flows.*
+!**/data/nodered/**/metrics.*
 
 **/data/minio/**
 !**/data/minio/**/kafka_config.*

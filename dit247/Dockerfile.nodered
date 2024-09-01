@@ -9,6 +9,7 @@ USER root
 RUN npm install node-red-contrib-minio-all
 RUN npm install node-red-contrib-kafka-manager
 RUN npm install node-red-dashboard
+RUN npm install node-red-node-email
 
 # Start Node-RED
 CMD ["npm", "start", "--", "--userDir", "/data"]
