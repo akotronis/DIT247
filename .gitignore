@@ -9,4 +9,4 @@
 **/data/minio/**
 !**/data/minio/**/kafka_config.*
 
-**/Demos/Initial/**
+**/Initial/**
