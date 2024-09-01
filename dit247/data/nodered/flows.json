@@ -77,7 +77,7 @@
         "id": "98de922eba11239a",
         "type": "ui_tab",
         "name": "Home",
-        "icon": "dashboard",
+        "icon": "fa-fire",
         "disabled": false,
         "hidden": false
     },
@@ -935,7 +935,6 @@
         "id": "b4e10aac68da31d1",
         "type": "inject",
         "z": "1b034dd948f70bc1",
-        "d": true,
         "name": "Repeatedly trigger file upload",
         "props": [
             {
@@ -1119,7 +1118,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 160,
-        "y": 1120,
+        "y": 1180,
         "wires": [
             [
                 "eca0a0c5eb12b906",
@@ -1142,16 +1141,16 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 420,
-        "y": 1200,
+        "y": 1260,
         "wires": []
     },
     {
         "id": "b4d918734d429aa9",
         "type": "comment",
         "z": "1b034dd948f70bc1",
-        "name": "Receive Minio webhook request from compressed image upload",
+        "name": "Receive Minio webhook request from compressed image upload, catch duration and send to graph",
         "info": "",
-        "x": 290,
+        "x": 400,
         "y": 1020,
         "wires": []
     },
@@ -1163,7 +1162,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 400,
-        "y": 1120,
+        "y": 1180,
         "wires": []
     },
     {
@@ -1352,7 +1351,7 @@
         "finalize": "",
         "libs": [],
         "x": 440,
-        "y": 1160,
+        "y": 1220,
         "wires": [
             [
                 "8bfba44c360ce2d0",
@@ -1394,7 +1393,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 690,
-        "y": 1200,
+        "y": 1260,
         "wires": []
     },
     {
@@ -1429,18 +1428,18 @@
         "label": "File resizing flow: Duration in milliseconds per incidence",
         "chartType": "line",
         "legend": "true",
-        "xformat": "auto",
+        "xformat": "HH:mm:ss",
         "interpolate": "linear",
         "nodata": "",
         "dot": true,
         "ymin": "",
         "ymax": "",
         "removeOlder": 1,
-        "removeOlderPoints": "100",
+        "removeOlderPoints": "10",
         "removeOlderUnit": "3600",
         "cutout": 0,
         "useOneColor": false,
-        "useUTC": false,
+        "useUTC": true,
         "colors": [
             "#1f77b4",
             "#aec7e8",
@@ -1456,7 +1455,7 @@
         "useDifferentColor": false,
         "className": ".wide-chart {     width: 100% !important;  /* Make the chart full width */     max-width: 100% !important;     height: 400px !important; /* Adjust the height as needed */ }",
         "x": 980,
-        "y": 1160,
+        "y": 1220,
         "wires": [
             []
         ]
@@ -1474,7 +1473,63 @@
         "finalize": "",
         "libs": [],
         "x": 710,
-        "y": 1160,
+        "y": 1220,
+        "wires": [
+            [
+                "57be86aef74c7077"
+            ]
+        ]
+    },
+    {
+        "id": "ca8602690c114f0b",
+        "type": "inject",
+        "z": "1b034dd948f70bc1",
+        "name": "Clear Graph",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 650,
+        "y": 1140,
+        "wires": [
+            [
+                "2946814e47194a97"
+            ]
+        ]
+    },
+    {
+        "id": "2946814e47194a97",
+        "type": "change",
+        "z": "1b034dd948f70bc1",
+        "name": "Set empty payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[]",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 830,
+        "y": 1140,
         "wires": [
             [
                 "57be86aef74c7077"
