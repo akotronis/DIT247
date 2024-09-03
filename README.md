@@ -1,5 +1,5 @@
 # General
-Repo for the project of 4nd semester (2023-2024) course Cloud Computing of the postgraduate program Informatics and Telematics of Harokopio University.
+Repo for the project of 4th semester (2023-2024) course Cloud Computing of the postgraduate program Informatics and Telematics of Harokopio University.
 
 # Scenario
 
