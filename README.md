@@ -104,7 +104,7 @@ For the openwhisk action implementation the **python v3.10 runtime** is used fol
 Demo videos can be seen below (from here: https://github.com/akotronis/DIT247/tree/main/static-files/Videos/Compressed)
 <!-- <p align="center"><img src="./static-files/Videos/Compressed/Retry-Pattern.mp4" alt="Flow" width="800"/></p> -->
 ### Single File Resizing Flow
-<p align="center">[](https://github.com/user-attachments/assets/38b5fbcc-976d-478a-bb66-5e41058cff69)</p>
+[retry](https://github.com/user-attachments/assets/38b5fbcc-976d-478a-bb66-5e41058cff69)
 
 ### Retry Pattern
 <p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/ca3048d4-baa8-49f7-8613-6b7e4ca1f771" type="video/mp4"></video></p>
