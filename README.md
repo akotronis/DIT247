@@ -166,4 +166,4 @@ Ensure that the image resizing flow operates efficiently, with a clear performan
 - **Monitoring Tools:** Node-RED will monitor and log the duration of each image processing flow, with alerts configured to notify administrators if processing times exceed the SLA limits.
 - **Reporting Frequency:** SLA performance will be reviewed monthly, with reports generated to assess compliance and identify any areas requiring improvement.
 
-This SLA ensures that your cloud-based image resizing service is reliable, with clear performance expectations and monitoring mechanisms to maintain high standards.
+This SLA ensures that the cloud-based image resizing service is reliable, with clear performance expectations and monitoring mechanisms to maintain high standards.
