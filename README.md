@@ -22,43 +22,43 @@ For each of the above scenarios we might want to design and implement a flow thr
 ## General
 The general file resizing flow appears below:
 
-<p align="center"><img src="./static-files/Pictures/Flow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/Flow.png" width="800"/></p>
 
 ## Details
 
 Node red is used for the flow orchestration and setup:
 
-<p align="center"><img src="./static-files/Pictures/NodeRedFlow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/NodeRedFlow.png" width="800"/></p>
 
 - Two buckets assumed to exist in minio, **dit247** where the initial files are uploaded and **dit247c** where the images are uploaded after resizing.  
 Those buckets can be created either from minio UI/cli directly or from a flow in nodered.
 
-<p align="center"><img src="./static-files/Pictures/Buckets.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/Buckets.png" width="800"/></p>
 
 ### Flow Steps Explanation
 
 - **Step 1**: For simulation purposes, a local folder exists with a pool of images from where a picture is randomly selected to be uploaded in minio from a nodered flow.
-<p align="center"><img src="./static-files/Pictures/SingleImageUpload.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/SingleImageUpload.png" width="800"/></p>
 
 - **Step 2**: Minio **dit247** bucket is setup to produce kafka notifications for image uploading as part of **pub/sub pattern**
 - **Step 3**: A **kafka consumer nodered node** is setup to receive the kafka messages on topic **dit247** as part of the **pub/sub pattern** and
 - **Step 4**: the image resizing action on openwhisk is invoked by a **nodered http request node**
-<p align="center"><img src="./static-files/Pictures/KafkaOpenwhisk.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/KafkaOpenwhisk.png" width="800"/></p>
 
 - **Step 5**: Openwhisk action fetches the image from minio **dit247** bucket, resizes it and
 - **Step 6**: sends it back to minio on **dit247c** bucket
-<p align="center"><img src="./static-files/Pictures/WebhookDashboard.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/WebhookDashboard.png" width="800"/></p>
 
 - **Step 7**: In minio **dit247c** bucket a **webhook** has been setup whichs sends an image upload request notification to a **http in nodered node** which displays the corresponding output.
 
 - **Repeated flow for multiple files**: The flow can be triggered repeatedly using the flow below:
-<p align="center"><img src="./static-files/Pictures/RepeatedeImageUpload.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/RepeatedeImageUpload.png" width="800"/></p>
 
 From here we can test the **retry pattern** by stopping the minio container, for example, to simulate failure.
 - **Monitoring**:
   - The flow duration for each file is monitored by catching corresponding *start* and *end* flow time and the duration is displayed in a graph on `localhost:1880/ui` using a **chart nodered node** and persisted to a file `metrics.txt` with a **write file nodered node**.  
   - If the file resize flow duration for a specific file exceeds **10 seconds**, then an email alert is sent with an **email nodered node**
-<p align="center"><img src="./static-files/Pictures/Graph.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/Graph.png" width="800"/></p>
 
 # Design Patterns
 - Retry Pattern
@@ -94,7 +94,7 @@ Installed nodes:
 - [node-red-node-email](https://flows.nodered.org/node/node-red-node-email) for sending email alerts
 
 The retry pattern is implemented as a subflow and used for the iamge upload to minio
-<p align="center"><img src="./static-files/Pictures/RetryPatternSubflow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="./static-files/Pictures/RetryPatternSubflow.png" width="800"/></p>
 
 ## Openwhisk
 For the openwhisk action implementation the **python v3.10 runtime** is used following the steps described [here](https://github.com/apache/openwhisk-runtime-python/blob/master/README.md#using-additional-python-libraries) but using a [**custom dockerfile**](https://github.com/akotronis/DIT247/blob/main/dit247/actions/dependencies/minio/Dockerfile.python)
@@ -103,19 +103,19 @@ For the openwhisk action implementation the **python v3.10 runtime** is used fol
 Demo videos can be seen below (from here: https://github.com/akotronis/DIT247/tree/main/static-files/Videos/Compressed)
 ### Single File Resizing Flow
 [](https://github.com/user-attachments/assets/38b5fbcc-976d-478a-bb66-5e41058cff69)
-<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/38b5fbcc-976d-478a-bb66-5e41058cff69" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Single-File-Resizing-Flow.mp4" type="video/mp4"></video></p>
 
 ### Retry Pattern
 [](https://github.com/user-attachments/assets/ca3048d4-baa8-49f7-8613-6b7e4ca1f771)
-<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/ca3048d4-baa8-49f7-8613-6b7e4ca1f771" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Retry-Pattern.mp4" type="video/mp4"></video></p>
 
 ### Repeated Flow with Dashboard
 [](https://github.com/user-attachments/assets/4aa3fb0b-e26f-4943-8a63-6449af663d10)
-<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/4aa3fb0b-e26f-4943-8a63-6449af663d10" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Repeated-Flow-with-Dashboard.mp4" type="video/mp4"></video></p>
 
 ### Email Alert
 [](https://github.com/user-attachments/assets/fc45531e-02b6-453b-8d86-d93bbc5e3cd2)
-<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/fc45531e-02b6-453b-8d86-d93bbc5e3cd2" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Email-Alert.mp4" type="video/mp4"></video></p>
 
 ## More Technical details
 More technical details for each configuration step can be found in a separate README here https://github.com/akotronis/DIT247/blob/main/dit247/README-tech.md
