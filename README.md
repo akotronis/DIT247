@@ -100,6 +100,7 @@ The retry pattern is implemented as a subflow and used for the iamge upload to m
 For the openwhisk action implementation the **python v3.10 runtime** is used following the steps described [here](https://github.com/apache/openwhisk-runtime-python/blob/master/README.md#using-additional-python-libraries) but using a [**custom dockerfile**](https://github.com/akotronis/DIT247/blob/main/dit247/actions/dependencies/minio/Dockerfile.python)
 
 ## Demos
+![TEST GITHUB VIDEO](https://github.com/akotronis/DIT247/blob/main/static-files/Videos/Compressed/Single-File-Resizing-Flow.mp4)
 Demo videos can be seen below (from here: https://github.com/akotronis/DIT247/tree/main/static-files/Videos/Compressed)
 <!-- <p align="center"><img src="./static-files/Videos/Compressed/Retry-Pattern.mp4" alt="Flow" width="800"/></p> -->
 ### Single File Resizing Flow
