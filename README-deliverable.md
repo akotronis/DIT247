@@ -22,43 +22,43 @@ For each of the above scenarios we might want to design and implement a flow thr
 ## General
 The general file resizing flow appears below:
 
-<p align="center"><img src="./static-files/Pictures/Flow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/3cbf946b-5e9b-43a0-b03f-24752d567bf2" alt="Flow" width="800"/></p>
 
 ## Details
 
 Node red is used for the flow orchestration and setup:
 
-<p align="center"><img src="./static-files/Pictures/NodeRedFlow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/8950b979-5db5-4dc9-9c09-8b8679f58f9f" alt="Flow" width="800"/></p>
 
 - Two buckets assumed to exist in minio, **dit247** where the initial files are uploaded and **dit247c** where the images are uploaded after resizing.  
 Those buckets can be created either from minio UI/cli directly or from a flow in nodered.
 
-<p align="center"><img src="./static-files/Pictures/Buckets.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/4b0131dd-bb7a-4cf2-9044-126b81e572a3" alt="Flow" width="800"/></p>
 
 ### Flow Steps Explanation
 
 - **Step 1**: For simulation purposes, a local folder exists with a pool of images from where a picture is randomly selected to be uploaded in minio from a nodered flow.
-<p align="center"><img src="./static-files/Pictures/SingleImageUpload.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/66445a4f-c32c-4a79-86cd-3cb6b0a6aa9f" alt="Flow" width="800"/></p>
 
 - **Step 2**: Minio **dit247** bucket is setup to produce kafka notifications for image uploading as part of **pub/sub pattern**
 - **Step 3**: A **kafka consumer nodered node** is setup to receive the kafka messages on topic **dit247** as part of the **pub/sub pattern** and
 - **Step 4**: the image resizing action on openwhisk is invoked by a **nodered http request node**
-<p align="center"><img src="./static-files/Pictures/KafkaOpenwhisk.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/9e40bce7-d7e4-42f1-bf58-a5d0c780da74" alt="Flow" width="800"/></p>
 
 - **Step 5**: Openwhisk action fetches the image from minio **dit247** bucket, resizes it and
 - **Step 6**: sends it back to minio on **dit247c** bucket
-<p align="center"><img src="./static-files/Pictures/WebhookDashboard.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/ed118050-15e7-4304-a2c3-3e96cd753049" alt="Flow" width="800"/></p>
 
 - **Step 7**: In minio **dit247c** bucket a **webhook** has been setup whichs sends an image upload request notification to a **http in nodered node** which displays the corresponding output.
 
 - **Repeated flow for multiple files**: The flow can be triggered repeatedly using the flow below:
-<p align="center"><img src="./static-files/Pictures/RepeatedeImageUpload.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/81c50b71-f4ce-44eb-9c8b-63fdedc7be5a" alt="Flow" width="800"/></p>
 
 From here we can test the **retry pattern** by stopping the minio container, for example, to simulate failure.
 - **Monitoring**:
   - The flow duration for each file is monitored by catching corresponding *start* and *end* flow time and the duration is displayed in a graph on `localhost:1880/ui` using a **chart nodered node** and persisted to a file `metrics.txt` with a **write file nodered node**.  
   - If the file resize flow duration for a specific file exceeds **10 seconds**, then an email alert is sent with an **email nodered node**
-<p align="center"><img src="./static-files/Pictures/Graph.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/29ec2bd7-5a96-4152-9530-ca8c53d3e0c1" alt="Flow" width="800"/></p>
 
 # Design Patterns
 - Retry Pattern
@@ -94,7 +94,7 @@ Installed nodes:
 - [node-red-node-email](https://flows.nodered.org/node/node-red-node-email) for sending email alerts
 
 The retry pattern is implemented as a subflow and used for the iamge upload to minio
-<p align="center"><img src="./static-files/Pictures/RetryPatternSubflow.png" alt="Flow" width="800"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/43bcfff7-498a-4248-ac85-06b9b275d636" alt="Flow" width="800"/></p>
 
 ## Openwhisk
 For the openwhisk action implementation the **python v3.10 runtime** is used following the steps described [here](https://github.com/apache/openwhisk-runtime-python/blob/master/README.md#using-additional-python-libraries) but using a [**custom dockerfile**](https://github.com/akotronis/DIT247/blob/main/dit247/actions/dependencies/minio/Dockerfile.python)
