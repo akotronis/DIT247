@@ -104,16 +104,16 @@ For the openwhisk action implementation the **python v3.10 runtime** is used fol
 Demo videos can be seen below (from here: https://github.com/akotronis/DIT247/tree/main/static-files/Videos/Compressed)
 <!-- <p align="center"><img src="./static-files/Videos/Compressed/Retry-Pattern.mp4" alt="Flow" width="800"/></p> -->
 ### Single File Resizing Flow
-<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Single-File-Resizing-Flow.mp4" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/38b5fbcc-976d-478a-bb66-5e41058cff69" type="video/mp4"></video></p>
 
 ### Retry Pattern
-<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Retry-Pattern.mp4" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/ca3048d4-baa8-49f7-8613-6b7e4ca1f771" type="video/mp4"></video></p>
 
 ### Repeated Flow with Dashboard
-<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Repeated-Flow-with-Dashboard.mp4" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/4aa3fb0b-e26f-4943-8a63-6449af663d10" type="video/mp4"></video></p>
 
 ### Email Alert
-<p align="center"><video width="800" controls><source src="./static-files/Videos/Compressed/Email-Alert.mp4" type="video/mp4"></video></p>
+<p align="center"><video width="800" controls><source src="https://github.com/user-attachments/assets/fc45531e-02b6-453b-8d86-d93bbc5e3cd2" type="video/mp4"></video></p>
 
 ## More Technical details
 More technical details for each configuration step can be found in a separate README here https://github.com/akotronis/DIT247/blob/main/dit247/README-tech.md
