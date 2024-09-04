@@ -1,11 +1,3 @@
-# Flow
-- Minio 
-- Create a bucket `dit247` in Minio
-- Inject Image -> Read Image -> Save to Minio bucket `dit247` on `/initial`
-- Minio sends file info to Kafka (Producer)
-- Openwhisk listens to Kafka (Consumer)
-- Openwhisk gets file from Minio compresses it and sends it to a different folder on `/compressed`
-
 # Commands
 ## Process management on Windows 11
 - `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
@@ -194,6 +186,8 @@ Running
 In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the output of `>>> vagrant ssh-config`
 
 # Docs
+- **SSH**
+  - [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
 - **Vagrant**
   - [Default User Settings](https://developer.hashicorp.com/vagrant/docs/boxes/base#default-user-settings)
   - [SSH Settings](https://developer.hashicorp.com/vagrant/docs/vagrantfile/ssh_settings#available-settings)

@@ -11,3 +11,4 @@
 !**/data/minio/**/kafka_config.*
 
 **/Initial/**
+*.zip
