@@ -186,8 +186,6 @@ Running
 In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the output of `>>> vagrant ssh-config`
 
 # Docs
-- **SSH**
-  - [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
 - **Vagrant**
   - [Default User Settings](https://developer.hashicorp.com/vagrant/docs/boxes/base#default-user-settings)
   - [SSH Settings](https://developer.hashicorp.com/vagrant/docs/vagrantfile/ssh_settings#available-settings)
