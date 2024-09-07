@@ -190,11 +190,25 @@ In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the o
   - [Default User Settings](https://developer.hashicorp.com/vagrant/docs/boxes/base#default-user-settings)
   - [SSH Settings](https://developer.hashicorp.com/vagrant/docs/vagrantfile/ssh_settings#available-settings)
   - [Synced Folders](https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage)
+  - [Vagrant ssh authentication failure](https://stackoverflow.com/questions/22922891/vagrant-ssh-authentication-failure/23554973#23554973)
+  - [Vagrant hangs at "SSH auth method: Private key](https://stackoverflow.com/questions/38463579/vagrant-hangs-at-ssh-auth-method-private-key)
 - **ssh/config files**
   - https://linux.die.net/man/5/ssh_config
   - https://www.ssh.com/academy/ssh/config
   - [Understanding SSH StrictHostKeyChecking Option](https://www.howtouselinux.com/post/ssh-stricthostkeychecking-option)
   - [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
+- **MinIO**
+  - [Introducing Webhooks for MinIO](https://blog.min.io/introducing-webhooks-for-minio/)
+  - [Event-Driven Architecture: MinIO Event Notification Webhooks using Flask](https://blog.min.io/minio-webhook-event-notifications/)
+  - [Publish Events to Webhook](https://min.io/docs/minio/linux/administration/monitoring/publish-events-to-webhook.html)
+  - [Publish Events to Kafka](https://min.io/docs/minio/linux/administration/monitoring/publish-events-to-kafka.html)
+  - [Bucket Notifications](https://min.io/docs/minio/linux/administration/monitoring/bucket-notifications.html)
+  - [Orchestrate Complex Workflows Using Apache Kafka and MinIO](https://blog.min.io/complex-workflows-apache-kafka-minio/)
+- **Node red**
+  - [Node-RED Dashboad 2.0 - Chart `ui-chart`- 1](https://dashboard.flowfuse.com/nodes/widgets/ui-chart.html#line-charts)
+  - [Node-RED Dashboad 2.0 - Chart `ui-chart`- 2](https://dashboard-demos.flowfuse.cloud/dashboard/charts-example#line-chart)
+  - [Node-red in Docker](https://www.youtube.com/watch?v=jLCw5yNbr_I)
+  - [Node-Red in Docker with Home Assistant](https://www.youtube.com/watch?v=fxo5-iiwZXk)
 - **Couchdb**
   - https://docs.couchdb.org/en/stable/config/intro.html#configuration-files
   - https://docs.couchdb.org/en/stable/setup/single-node.html#single-node-setup
@@ -205,6 +219,7 @@ In any case, to connect with VSCode to the vm, update `~/.ssh/config` with the o
   - [Standalone Server](https://github.com/apache/openwhisk/blob/master/core/standalone/README.md) (Github)
   - [Docker compose setup](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/README.md) (Github)
   - [Docker compose file](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/docker-compose.yml) (Github)
+  - [How to setup OpenWhisk with Docker Compose](https://github.com/apache/openwhisk-devtools/blob/master/docker-compose/README.md) (Github)
   - [Actions](https://github.com/apache/openwhisk/blob/master/docs/actions.md#listing-actions) (Github)
   - [wsk cli](https://github.com/apache/openwhisk/blob/master/docs/cli.md#openwhisk-cli) (Github)
   - [Automating Actions from Event Sources](https://openwhisk.apache.org/documentation.html#automating_actions_from_event_sources) (Apache)
