@@ -1,6 +1,6 @@
 # Commands
 ## Process management on Windows 11
-- `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>>  netstat -aon | findstr LISTEN` for all listening ports
+- `>>> netstat -aon | findstr :3234` to check processes running on a specific port or `>>> findstr /C:"3232" /C:"8080" ...` for multiple ports or `>>>  netstat -aon | findstr LISTEN` for all listening ports
 - `>>> tasklist /FI "PID eq 19812"` to identify the process
 - `>>> taskkill /PID 19812 /F` to kill the process
 - `>>> tasklist | findstr /I "VBox"` to print the processes that run under Image Name starting with `VBox`
@@ -106,9 +106,6 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
 ### VM launch and setup
 - In Windows host run `>>> vagrant up` in the folder where the `Vagrantfile` is
 - Connect to vm with VSCode using one of the hosts in `~/.ssh/config` file
-- Run `>>> ps -eF | grep java` to see if the openwhisk launch command is running and if not run it:
-  - `>>> sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui`
-- Check if Openwhisk API is accessible: `>>> curl http:0.0.0.0:3233`
 - Forward ports from VSCode
   - 1880 (Nodered UI `http://localhost:1880` and dashboard `http://localhost:1880/ui`)
   - 9991 (Minio UI `http://localhost:9991/browser`)
@@ -117,6 +114,17 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - 3233 (Openwisk API `http://localhost:3233` required for postman. Can test from vm if it is available with `>>> curl http://0.0.0.0:3233`)
   - 3232 (Openwisk playground `http://localhost:3232/playground/ui/index.html`. Not required.)
   - 8025 (Mailhog UI, if used `http://localhost:8025/`)
+- If VSCode has problems with ssh, then:
+  - `>>> vagrant ssh -- -L 1880:localhost:1880 -L 9991:localhost:9991 -L 8080:localhost:8080 -L 5984:localhost:5984 -L 3233:localhost:3233 -L 3232:localhost:3232 -L 8025:localhost:8025` to ssh with vagrant and map required ports to local machine
+  - Verify port mapping with `>>> netstat -aon | findstr /C:"1880" /C:"9991" /C:"8080" /C:"5984" /C:"3233" /C:"3232" /C:"8025"`
+  - Ports should be releashed when terminating ssh session by `>>> logout` or `>>> exit`from inside the vm
+  - If terminal is closed without logging out and the session is open, then  
+    - `>>> Get-Process | Where-Object { $_.ProcessName -like "*ssh*" }` and `>>> taskkill /PID <Id> /F` (`Id` column number) from **powershell** or
+    - `>>> ps aux | grep ssh` and `>>> kill -9 <PID>` (`PID` column number) from **gitbash**
+- Run `>>> ps -eF | grep java` to see if the openwhisk launch command is running and if not run it:
+  - `>>> sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui`
+- Check if Openwhisk API is accessible: `>>> curl http:0.0.0.0:3233`
+
 - `>>> docker-compose up -d` (or `>>> docker-compose up -d -build` if needed) in `~/dit247`
 - Check the forwarded ports from browser in the above urls and
 - make sure the containers are Up with `>>> docker ps -a`
