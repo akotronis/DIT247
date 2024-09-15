@@ -20,6 +20,7 @@
   - `>>> ssh -p 2222 -i ~/.vagrant.d/insecure_private_keys/vagrant.key.ed25519 vagrant@127.0.0.1 -o LogLevel=DEBUG`
   - `>>> ssh -p 2222 vagrant@127.0.0.1 -o LogLevel=DEBUG` (vagrant)
   - `>>> ssh -p 2222 root@127.0.0.1 -o LogLevel=DEBUG` (root)
+  - Add `-L 1880:localhost:1880 -L 9991:localhost:9991 -L 8080:localhost:8080 -L 5984:localhost:5984 -L 3233:localhost:3233 -L 3232:localhost:3232 -L 8025:localhost:8025` to ssh with port mapping
 
 # Launch and test the flow
 ### Prerequisites: Synced folder
