@@ -104,7 +104,7 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - `>>> mc admin service restart minio`
 
 ### VM launch and setup
-- In Windows host run `>>> vagrant up` in the folder where the `Vagrantfile` is
+- In local mahchine run `>>> vagrant up` in the folder where the `Vagrantfile` is
 - Connect to vm with VSCode using one of the hosts in `~/.ssh/config` file
 - Forward ports from VSCode
   - 1880 (Nodered UI `http://localhost:1880` and dashboard `http://localhost:1880/ui`)
@@ -116,11 +116,13 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - 8025 (Mailhog UI, if used `http://localhost:8025/`)
 - If VSCode has problems with ssh, then:
   - `>>> vagrant ssh -- -L 1880:localhost:1880 -L 9991:localhost:9991 -L 8080:localhost:8080 -L 5984:localhost:5984 -L 3233:localhost:3233 -L 3232:localhost:3232 -L 8025:localhost:8025` to ssh with vagrant and map required ports to local machine
-  - Verify port mapping with `>>> netstat -aon | findstr /C:"1880" /C:"9991" /C:"8080" /C:"5984" /C:"3233" /C:"3232" /C:"8025"`
-  - Ports should be releashed when terminating ssh session by `>>> logout` or `>>> exit`from inside the vm
+  - Verify port mapping with `>>> netstat -aon | findstr /C:"1880" /C:"9991" /C:"8080" /C:"5984" /C:"3233" /C:"3232" /C:"8025"` from local machine
+  - Ports should be releashed when terminating ssh session by `>>> logout` or `>>> exit` from inside the vm
   - If terminal is closed without logging out and the session is open, then  
     - `>>> Get-Process | Where-Object { $_.ProcessName -like "*ssh*" }` and `>>> taskkill /PID <Id> /F` (`Id` column number) from **powershell** or
     - `>>> ps aux | grep ssh` and `>>> kill -9 <PID>` (`PID` column number) from **gitbash**
+
+Inside the vm:
 - Run `>>> ps -eF | grep java` to see if the openwhisk launch command is running and if not run it:
   - `>>> sudo java -Dwhisk.standalone.host.name=0.0.0.0 -Dwhisk.standalone.host.internal=0.0.0.0 -Dwhisk.standalone.host.external=0.0.0.0 -jar ~/openwhisk/bin/openwhisk-standalone.jar --couchdb --kafka --api-gw --kafka-ui`
 - Check if Openwhisk API is accessible: `>>> curl http:0.0.0.0:3233`
