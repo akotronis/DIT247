@@ -122,7 +122,7 @@ Configure webhook notiications on endpoint **http://ctr-nodered:1880/compressed-
   - If terminal is closed without logging out and the session is open, then  
     - `>>> Get-Process | Where-Object { $_.ProcessName -like "*ssh*" }` and `>>> taskkill /PID <Id> /F` (`Id` column number) from **powershell** or
     - `>>> ps aux | grep ssh` and `>>> kill -9 <PID>` (`PID` column number) from **gitbash**
-- If problems continue:
+- If problems continue: (***LIFESAVER***)
   - Run `>>> vagrant halt`
   - Open **VirtualBox** and in the settings of the vm, in **System** left pane and under **Acceleration** tab, make sure **Hardware virtualization** is **unchecked**. Click **Ok**
   - `>>> vagrant up` again and try to ssh
